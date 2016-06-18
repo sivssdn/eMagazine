@@ -1,0 +1,3 @@
+events table
+
+INSERT INTO emagazine.public.events (title, image, content, status, edition, area) VALUES (?, ?, ?, ?, ?, ?);
