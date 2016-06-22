@@ -5,6 +5,7 @@ import database.DatabaseManager;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FileUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -18,7 +19,25 @@ import java.util.List;
 
 public class MostReadArticles {
     String title;
+    String titleKannada;
     String link;
+    String linkKannada;
+
+    public String getTitleKannada() {
+        return titleKannada;
+    }
+
+    public void setTitleKannada(String titleKannada) {
+        this.titleKannada = titleKannada;
+    }
+
+    public String getLinkKannada() {
+        return linkKannada;
+    }
+
+    public void setLinkKannada(String linkKannada) {
+        this.linkKannada = linkKannada;
+    }
 
     public String getTitle() {
         return title;
@@ -36,26 +55,31 @@ public class MostReadArticles {
         this.link = link;
     }
 
-    public List<MostReadArticles> getAllRecentArticles(String area, String month, int year) {
+    public List<MostReadArticles> getAllRecentArticles(String area, String month, int year, String status) {
 
         DatabaseManager db = new DatabaseManager();
         List<MostReadArticles> allArticles = new LinkedList<>();
 
         if (db.success.intern() == "success") {
-            String selectStatement = "SELECT title, link, status, area, month, year FROM emagazine.public.most_read_articles WHERE status ILIKE 'APPROVED' AND month = lower(?) AND year = ? AND area = ?;";
+            String selectStatement = "SELECT title, link, serial, title_kannada, link_kannada" +
+                    "  FROM emagazine.public.most_read_articles" +
+                    " WHERE month = lower(?) AND year = ? AND area = ? AND status ILIKE ? ORDER BY serial ASC;";
 
             try {
                 PreparedStatement statement = db.con.prepareStatement(selectStatement);
                 statement.setString(1, month);
                 statement.setInt(2, year);
                 statement.setString(3, area);
+                statement.setString(4, status);
 
 
                 ResultSet articlesInDB = db.select(statement);
                 while (articlesInDB.next()) {
                     MostReadArticles singleArticle = new MostReadArticles();
                     singleArticle.setTitle(articlesInDB.getString("title"));
+                    singleArticle.setTitleKannada(articlesInDB.getString("title_kannada"));
                     singleArticle.setLink(articlesInDB.getString("link"));
+                    singleArticle.setLinkKannada(articlesInDB.getString("link_kannada"));
 
                     allArticles.add(singleArticle);
                 }
@@ -75,18 +99,19 @@ public class MostReadArticles {
 
         try {
             PreparedStatement statement = db.con.prepareStatement("INSERT INTO public.most_read_articles(" +
-                    "            title, link, status, area, month, year, serial, title_kannada)" +
-                    "    VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
+                    "            title, link, status, area, month, year, serial, title_kannada, link_kannada)" +
+                    "    VALUES (?, ?, ?, ?, lower(?), ?, ?, ?, ?);");
 
             for (int i = 1; i < 11; i++) {
                 statement.setString(1, " ");
                 statement.setString(2, " ");
-                statement.setString(3, "editting");
+                statement.setString(3, "editing");
                 statement.setString(4, area);
                 statement.setString(5, month);
                 statement.setInt(6, year);
                 statement.setInt(7, i);
                 statement.setString(8, " ");
+                statement.setString(9, " ");
                 db.insert(statement);
 
             }
@@ -98,8 +123,7 @@ public class MostReadArticles {
 
     public void updateMostRead(String directory, int articleNumber, String contentType, HttpServletRequest request, HttpSession session) {
 
-        String uploadedFilePath = "#";
-        String[] mostReadFields = {"TitleEnglish", "TitleKannada", "Link"};
+        String[] mostReadFields = {"TitleEnglish", "TitleKannada", "Link","Link_kannada"};
         String[] mostReadValues = new String[mostReadFields.length];
 
 
@@ -120,15 +144,27 @@ public class MostReadArticles {
                         //check the file extension
                         String fileExtension = "";
                         if (fileName.intern() != "")
-                            fileExtension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
+                            fileExtension = fileName.substring(fileName.lastIndexOf("."), fileName.length()).toLowerCase();
 
                         //if matches image extension
-                        if (fileExtension.equals(".jpg")) {
+                        if (fileExtension.equals(".jpg") || fileExtension.equals(".jpeg") || fileExtension.equals(".png") ||
+                                fileExtension.equals(".pdf") || fileExtension.equals(".doc") || fileExtension.equals(".docx")
+                                || fileExtension.equals(".xls")) {
                             file = new File(directory + fileName);
                             fi.write(file);
 
-                            uploadedFilePath = directory + fileName;
-                            mostReadValues[2] = uploadedFilePath;
+                            //uploadedFilePath = directory + fileName;
+
+                            //rename file by appending current timestamp
+                            String newFileName = fi.getName().substring(0, fileName.lastIndexOf("."));
+                            newFileName +=String.valueOf(System.currentTimeMillis()) + fileExtension;
+                            FileUtils.moveFile(FileUtils.getFile(directory + fileName), FileUtils.getFile(directory + newFileName));
+
+
+                            if(fi.getFieldName().equals("mostRead"+articleNumber+"FileEnglish"))
+                                mostReadValues[2] = directory + newFileName; //initialized to # in case of null
+                            else
+                                mostReadValues[3] = directory + newFileName;
                         }
 
                     } else if (fi.isFormField()) {
@@ -155,19 +191,20 @@ public class MostReadArticles {
             if (db.success.intern() == "success") {
 
                 String updateStatement = "UPDATE public.most_read_articles" +
-                        "   SET title=?, link=?, title_kannada=?" +
-                        " WHERE serial = ? AND month = ? AND year = ? AND area = ? AND status = 'editting';;";
+                        "   SET title=?, link=?, title_kannada=?, link_kannada=?" +
+                        " WHERE serial = ? AND month = ? AND year = ? AND area = ? AND status = 'editing';";
                 try {
 
                     PreparedStatement statement = db.con.prepareStatement(updateStatement);
                     statement.setString(1, mostReadValues[0]);
                     statement.setString(2, mostReadValues[2]);
                     statement.setString(3, mostReadValues[1]);
+                    statement.setString(4, mostReadValues[3]);
 
-                    statement.setInt(4, articleNumber);
-                    statement.setString(5, session.getAttribute("month").toString());
-                    statement.setInt(6, Integer.parseInt(session.getAttribute("year").toString()));
-                    statement.setString(7, session.getAttribute("area").toString());
+                    statement.setInt(5, articleNumber);
+                    statement.setString(6, session.getAttribute("month").toString());
+                    statement.setInt(7, Integer.parseInt(session.getAttribute("year").toString()));
+                    statement.setString(8, session.getAttribute("area").toString());
                     db.update(statement);
 
                 } catch (SQLException se) {

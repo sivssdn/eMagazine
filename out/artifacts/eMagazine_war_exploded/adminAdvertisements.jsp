@@ -50,8 +50,22 @@
     </ul>
 </div>
 
-<center><h4> ADVERTISEMENTS </h4></center>
-<br/>
+<div class="container">
+    <nav>
+        <div class="nav-wrapper" style="background-color: #795548;">
+            <a href="adminAdvertisements.jsp" class="brand-logo" style="margin-left: 10px">Advertisements</a>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="adminEvents.jsp">Events</a></li>
+                <li><a href="adminNewsFeed.jsp">News Feed</a></li>
+                <li><a href="adminOtherStories.jsp">Other Stories</a></li>
+                <li><a href="adminMiscellaneous.jsp"> Miscellaneous </a></li>
+                <li><a href="adminMostReadArticles.jsp">Most Read Articles</a></li>
+            </ul>
+        </div>
+    </nav>
+</div>
+<br/><br/>
+
 
 <div class="row">
     <div class="col s12">

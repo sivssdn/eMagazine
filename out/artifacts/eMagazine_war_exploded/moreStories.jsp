@@ -1,7 +1,7 @@
-<%@ page import="process.Stories" %>
-<%@ page import="java.util.List" %>
 <%@ page import="process.General" %>
+<%@ page import="process.Stories" %>
 <%@ page import="java.util.Calendar" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%response.setHeader("X-XSS-Protection", "1; mode=block");%>
 <html>
@@ -12,31 +12,42 @@
         var stories_content = [];
         var stories_image = [];
     <%
-
+        General escape = new General();
         String pageToDisplay = "mrc";
           int isDistrict = 0;
           int isUlb = 0;
-          if(request.getParameter("district") != null ){
+           if(escape.escapeHtml(request.getParameter("district")) != null ){
               pageToDisplay = request.getParameter("district");
               isDistrict = 1;
-          }else if(request.getParameter("ulb") != null){
+          }else if(escape.escapeHtml(request.getParameter("ulb")) != null){
               pageToDisplay = request.getParameter("ulb");
               isUlb = 1;
           }
 
-          //get current month
+      //status=editing for preview purposes
+            String status = "APPROVED";
+            if(escape.escapeHtml(request.getParameter("status")) != null && request.getParameter("status").equals("editing"))
+                status = "editing";
+
+          //get month
+
           String[] monthNames = { "January", "February", "March", "April", "May", "June", "July",
                   "August", "September", "October", "November", "December" };
           Calendar now = Calendar.getInstance();
           String monthName = monthNames[now.get(Calendar.MONTH)];
           int year = now.get(Calendar.YEAR);
+          if(escape.escapeHtml(request.getParameter("month")) != null && escape.escapeHtml(request.getParameter("year")) != null)
+          {
+            monthName = escape.escapeHtml(request.getParameter("month"));
+            year =  Integer.parseInt(request.getParameter("year"));
+          }
 
 
 
         //for other stories
-        General escape = new General();
+
         Stories story = new Stories();
-        List<Stories> allStories = story.getAllStories(pageToDisplay, "june", year, 30);
+        List<Stories> allStories = story.getAllStories(pageToDisplay, "june", year, 30, status);
 
     %>
     </script>

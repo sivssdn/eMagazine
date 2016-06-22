@@ -24,7 +24,7 @@ public class Edition {
                 statement.setString(1, month);
                 statement.setInt(2, year);
                 statement.setString(3, area);
-                statement.setString(4, "editting");
+                statement.setString(4, "editing");
 
                 db.insert(statement);
 
@@ -34,7 +34,7 @@ public class Edition {
                 news = new NewsFeed();
                 news.declareNewsFeed(month, year, area, db);
                 story = new Stories();
-                story.declareEvent(month, year, area, db);
+                story.declareStories(month, year, area, db);
                 article = new MostReadArticles();
                 article.declareEvent(month, year, area, db);
                 miscell = new Miscellaneous();

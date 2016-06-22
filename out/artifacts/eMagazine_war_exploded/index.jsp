@@ -1,11 +1,6 @@
-<%@ page import="java.sql.ResultSet" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.HashMap" %>
-<%@ page import="java.util.*" %>
-<%@ page import="com.google.common.html.HtmlEscapers" %>
 <%@ page import="process.*" %>
-<%@ page import="java.util.regex.Pattern" %>
-<%@ page import="java.util.regex.Matcher" %>
+<%@ page import="java.util.Calendar" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%response.setHeader("X-XSS-Protection", "1; mode=block");%>
 <!DOCTYPE HTML>
@@ -15,65 +10,95 @@
         <script>
             //for events
             var events_title = [];
+            var events_title_kannada = [];
             var events_image = [];
             var events_content = [];
+            var events_content_kannada = [];
 
             //for news feed
             var news_title = [];
+            var news_title_kannada = [];
             var news_link = [];
+            var news_link_kannada = [];
             var news_content = [];
+            var news_content_kannada = [];
 
             //for other_stories section
             var stories_title = [];
+            var stories_title_kannada = [];
             var stories_content = [];
+            var stories_content_kannada = [];
             var stories_image = [];
 
-            //for recent articles
+            //for most read articles
             var recent_article_title = [];
+            var recent_article_title_kannada = [];
             var recent_article_link = [];
+            var recent_article_link_kannada = [];
 
             //for miscellaneous
             var miscellaneous_title = [];
+            var miscellaneous_title_kannada = [];
             var miscellaneous_content = [];
+            var miscellaneous_content_kannada = [];
+            var miscellaneous_link = [];
+            var miscellaneous_link_kannada = [];
+
       <%
-
-    //TEMPORARY SESSION VARIABLE-------
-    session.setAttribute("area","mrc");
-    //----------------------------------
-
-
+//TEMORARY
+session.setAttribute("area","mrc");
+//----
+            General escape = new General(); //to escape all the HTML inputs
+          //to select the area
           String pageToDisplay = "mrc";
           int isDistrict = 0;
           int isUlb = 0;
-          if(request.getParameter("district") != null ){
-              pageToDisplay = request.getParameter("district");
+          if(escape.escapeHtml(request.getParameter("district")) != null ){
+              pageToDisplay = escape.escapeHtml(request.getParameter("district"));
               isDistrict = 1;
-          }else if(request.getParameter("ulb") != null){
-              pageToDisplay = request.getParameter("ulb");
+          }else if(escape.escapeHtml(request.getParameter("ulb")) != null){
+              pageToDisplay = escape.escapeHtml(request.getParameter("ulb"));
               isUlb = 1;
           }
 
+            //get status=approved for clients
+            //status=editing for preview purposes
+            String status = "APPROVED";
+            if(escape.escapeHtml(request.getParameter("status")) != null && request.getParameter("status").equals("editing"))
+                status = "editing";
 
-          //get current month
+          //get month
+
           String[] monthNames = { "January", "February", "March", "April", "May", "June", "July",
                   "August", "September", "October", "November", "December" };
           Calendar now = Calendar.getInstance();
           String monthName = monthNames[now.get(Calendar.MONTH)];
           int year = now.get(Calendar.YEAR);
+          if(escape.escapeHtml(request.getParameter("month")) != null && escape.escapeHtml(request.getParameter("year")) != null)
+          {
+            monthName = escape.escapeHtml(request.getParameter("month"));
+            year =  Integer.parseInt(request.getParameter("year"));
+          }
+
 
 
           //to get all events under the area name
-          General escape = new General();
 
           Events event = new Events();
-          List<Events> allEvents = event.getAllEvents(pageToDisplay, "june", year);
+          List<Events> allEvents = event.getAllEvents(pageToDisplay, monthName, year, status);
           try {
               for(int i=0; i< allEvents.size(); i++)
               {
                     Events singleEvent = allEvents.get(i);
+
+                   //ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+                   //String path = classLoader.getResource(singleEvent.getImagePath()).getPath();
+
                     out.println("events_title["+i+"] =\" "+ escape.escapeHtml(singleEvent.getTitle()) + " \" ;");
-                    out.println("events_image["+i+"] =\" "+ escape.escapeHtml(singleEvent.getImagePath()) + " \" ;");
+                    out.println("events_title_kannada["+i+"] =\" "+ escape.escapeHtml(singleEvent.getTitleKannada()) + " \" ;");
+                    out.println("events_image["+i+"] =\"/resources?name="+ escape.escapeHtml(singleEvent.getImagePath()) + " \" ;");
                     out.println("events_content["+i+"] =\" "+ escape.escapeHtml(singleEvent.getEventsContent()) + " \" ;");
+                    out.println("events_content_kannada["+i+"] =\" "+ escape.escapeHtml(singleEvent.getEventsContentKannada()) + " \" ;");
               }
           }catch(Exception e){
               //redirect to error page
@@ -86,13 +111,32 @@
         //for news feed
 
         NewsFeed news = new NewsFeed();
-        List<NewsFeed> listOfAllNews = news.getNewsFeed(pageToDisplay, "june");
+        List<NewsFeed> listOfAllNews = news.getNewsFeed(pageToDisplay, year, monthName, status);
 
                             for(int i=0; i< listOfAllNews.size(); i++){
                                 NewsFeed singleNews = listOfAllNews.get(i);
 
                                 out.print("news_title["+i+"]=\""+escape.escapeHtml(singleNews.getTitle())+"\" ;");
-                                out.print("news_link["+i+"]=\""+escape.escapeHtml(singleNews.getLink())+"\" ;");
+                                out.print("news_title_kannada["+i+"]=\""+escape.escapeHtml(singleNews.getTitleKannada())+"\" ;");
+
+                                String extension = singleNews.getLink();
+                                if(extension.length() > 2)
+                                {
+                                    extension = singleNews.getLink().substring(singleNews.getLink().lastIndexOf('.'), singleNews.getLink().length()).toLowerCase();
+                                    if(extension.equals(".jpg") || extension.equals(".jpeg") || extension.equals(".png") || extension.equals(".pdf"))
+                                    {
+                                        out.print("news_link["+i+"]=\"/resources?name="+escape.escapeHtml(singleNews.getLink())+"\" ;");
+                                        out.print("news_link_kannada["+i+"]=\"/resources?name="+escape.escapeHtml(singleNews.getLinkKannada())+"\" ;");
+                                    }else{
+                                        out.print("news_link["+i+"]=\""+singleNews.getLink()+"\" ;");
+                                        out.print("news_link_kannada["+i+"]=\""+singleNews.getLinkKannada()+"\" ;");
+                                    }
+                                }else{
+                                        out.print("news_link["+i+"]=\""+singleNews.getLink()+"\" ;");
+                                        out.print("news_link_kannada["+i+"]=\""+singleNews.getLinkKannada()+"\" ;");
+                                    }
+
+                                out.print("news_content_kannada["+i+"]=\""+escape.escapeHtml(singleNews.getContentKannada())+"\" ;");
                                 out.print("news_content["+i+"]=\""+escape.escapeHtml(singleNews.getContent())+"\" ;");
                             }
 
@@ -101,47 +145,79 @@
         //for other stories
 
         Stories story = new Stories();
-        List<Stories> allStories = story.getAllStories(pageToDisplay, "june", year, 3);
+        List<Stories> allStories = story.getAllStories(pageToDisplay, monthName, year, 3, status);
 
                         for(int i=0; i<allStories.size(); i++)
                         {
                                 Stories singleStory = allStories.get(i);
 
                                 out.print("stories_title["+i+"]=\""+ escape.escapeHtml(singleStory.getTitle()) +"\" ;");
+                                out.print("stories_title_kannada["+i+"]=\""+ escape.escapeHtml(singleStory.getTitleKannada()) +"\" ;");
                                 out.print("stories_content["+i+"]=\""+ escape.escapeHtml(singleStory.getStoriesContent()) +"\" ;");
-                                out.print("stories_image["+i+"]=\""+ escape.escapeHtml(singleStory.getImagePath()) +"\" ;");
+                                out.print("stories_content_kannada["+i+"]=\""+ escape.escapeHtml(singleStory.getStoriesContentKannada()) +"\" ;");
+                                out.print("stories_image["+i+"]=\"/resources?name="+ escape.escapeHtml(singleStory.getImagePath()) +"\" ;");
 
                         }
 
 
-         //for recent articles
+         //for most read articles
          MostReadArticles recent = new MostReadArticles();
-         List<MostReadArticles> allRecentArticles = recent.getAllRecentArticles(pageToDisplay, "june", year);
+         List<MostReadArticles> allRecentArticles = recent.getAllRecentArticles(pageToDisplay, monthName, year, status);
 
                          for(int i=0; i<allRecentArticles.size(); i++)
                          {
                                 MostReadArticles article = allRecentArticles.get(i);
 
                                 out.print("recent_article_title["+i+"] = \""+ escape.escapeHtml(article.getTitle()) +"\";");
-                                out.print("recent_article_link["+i+"] = \""+ escape.escapeHtml(article.getLink()) +"\";");
+                                out.print("recent_article_title_kannada["+i+"] = \""+ escape.escapeHtml(article.getTitleKannada()) +"\";");
+
+                                String extension = article.getLink();
+                                if(extension.length() > 2)
+                                {
+                                   extension = article.getLink().substring(article.getLink().lastIndexOf('.'), article.getLink().length()).toLowerCase();
+                                    if(extension.equals(".jpg") || extension.equals(".jpeg") || extension.equals(".png") || extension.equals(".pdf"))
+                                    {
+                                        out.print("recent_article_link["+i+"] = \"/resources?name="+ article.getLink() +"\";");
+                                        out.print("recent_article_link_kannada["+i+"] = \"/resources?name="+ article.getLinkKannada() +"\";");
+                                    }else{
+                                        out.print("recent_article_link["+i+"] = \""+ article.getLink() +"\";");
+                                        out.print("recent_article_link_kannada["+i+"] = \""+ article.getLinkKannada() +"\";");
+                                    }
+                                }else{
+                                        out.print("recent_article_link["+i+"] = \""+ article.getLink() +"\";");
+                                        out.print("recent_article_link_kannada["+i+"] = \""+ article.getLinkKannada() +"\";");
+                                    }
                          }
 
 
          //for miscellaneous section
           //General urlContent =  new General();
           Miscellaneous rows = new Miscellaneous();
-          List<Miscellaneous> allMiscellaneous = rows.getAllMiscellaneous(pageToDisplay, "june", year);
+          List<Miscellaneous> allMiscellaneous = rows.getAllMiscellaneous(pageToDisplay, monthName, year, status);
                         for(int i=0; i<allMiscellaneous.size(); i++)
                         {
                                 Miscellaneous row = allMiscellaneous.get(i);
-               //                 String content = escape.escapeHtml(row.getContent());
-              //                  out.print("miscellaneous_content["+i+"]=\""+urlContent.urlExtracter(content)+"\";");
+
                                 out.print("miscellaneous_content["+i+"]=\""+escape.escapeHtml(row.getContent())+"\";");
-                                out.print("miscellaneous_title["+i+"]=\""+escape.escapeHtml(row.getTitle())+"\";");
+                                out.print("miscellaneous_content_kannada["+i+"]=\""+escape.escapeHtml(row.getContentKannada())+"\";");
+
+                                String extension = row.getLink();
+                                if(extension.length() > 2)
+                                {
+                                   extension = row.getLink().substring(row.getLink().lastIndexOf('.'), row.getLink().length()).toLowerCase();
+                                    if(extension.equals(".jpg") || extension.equals(".jpeg") || extension.equals(".png") || extension.equals(".pdf")){
+                                        out.print("miscellaneous_link["+i+"]=\"/request?name="+row.getLink()+"\";");
+                                        out.print("miscellaneous_link_kannada["+i+"]=\"/request?name="+row.getLinkKannada()+"\";");
+                                    }
+                                }else
+                                {
+                                            out.print("miscellaneous_link["+i+"]=\""+row.getLink()+"\";");
+                                            out.print("miscellaneous_link_kannada["+i+"]=\"="+row.getLinkKannada()+"\";");
+                                }
+
                         }
 
-                        //trying image compression
-                      //  urlContent.compressImages();
+
       %>
       </script>
 
@@ -178,20 +254,23 @@
   </head>
   <body>
 
-
   <header>
 
-      <ul id="dropdownDistrict" class="dropdown-content">
+
           <% if(isDistrict == 0 && isUlb == 0) {%>
-          <li><a href="<%= "index.jsp?district=district 1"%>" >District 1</a></li>
-          <li><a href="<%= "index.jsp?district=district 2"%>">District 2</a></li>
-          <li><a href="<%= "index.jsp?district=district 3"%>">District 3</a></li>
+      <ul id="dropdownDistrict" class="dropdown-content">
+          <li><a href="<%= "index.jsp?district=Bidar"%>" >Bidar</a></li>
+          <li><a href="<%= "index.jsp?district=Udupi"%>">Udupi</a></li>
+          <li><a href="<%= "index.jsp?district=Mysore"%>">Mysore</a></li>
+
           <%} else if(isDistrict == 1){%>
-          <li><a href="<%= "index.jsp?ulb=ulb 1"%>">ULB 1</a></li>
-          <li><a href="<%= "index.jsp?ulb=ulb 2"%>">ULB 2</a></li>
-          <li><a href="<%= "index.jsp?ulb=ulb 3"%>">ULB 3</a></li>
+      <ul id="dropdownDistrict" class="dropdown-content">
+          <li><a href="<%= "index.jsp?ulb=ulb 1"%>">Konnur</a></li>
+          <li><a href="<%= "index.jsp?ulb=ulb 2"%>">Hanur</a></li>
+          <li><a href="<%= "index.jsp?ulb=ulb 3"%>">Birur</a></li>
           <%}%>
       </ul>
+
 
       <nav style="height: 10em; background-color: #009688;">
           <div class="nav-wrapper container">
@@ -202,7 +281,12 @@
                   <a href="index.jsp" class="brand-logo center" style="margin-top: 2%;">eMagazine
                       <br/>
                     <span class="dropdown-button center" data-activates="dropdownDistrict"
-                          style="margin-top: -2.5%; font-size: 0.6em;">Choose District
+                          style="margin-top: -2.5%; font-size: 0.6em;">
+                        <% if(isDistrict == 0 && isUlb == 0) {%>
+                        Choose District
+                        <%} else if(isDistrict == 1){%>
+                        Choose ULB
+                        <%}%>
                     <i class="material-icons right">arrow_drop_down</i> </span>
                   </a>
                   <a href="index.jsp" class="right hide-on-small-and-down" style="margin-top: 0.5%; margin-right: 10%;">
@@ -223,8 +307,8 @@
 
   <!--after header-->
   <main>
-
       <div class="container" style="width: 90%;">
+          <p class="light right push-l5"><a href=""><strong> Kannada </strong></a>/ <a href=""><strong>English</strong></a> </p></div>
           <div class="row">
                   <!--Events -->
                   <div class="col s12 m5">
@@ -552,9 +636,6 @@
 
       </div>
 
-
-
-
    </main>
 
   <footer class="page-footer" style="background-color: #009688;">
@@ -613,9 +694,11 @@
 
           $("#event_title").text(events_title[id]);
           $("#event_modal_title").text(events_title[id]);
-          $("#event_image").text(events_image[id]);
+          document.getElementById("event_image").src = events_image[id];
           $("#event_modal_image").text(events_image[id]);
-          $("#event_summary").text(events_content[id]);
+
+          if(events_content[id] != undefined)
+             document.getElementById("event_summary").innerHTML = events_content[id].substring(0, 100);
           $("#event_modal_content").text(events_content[id]);
 
 
@@ -663,7 +746,8 @@
               document.getElementById(stories[i]+"_modal_image").src = stories_image[i];
               document.getElementById(stories[i]+"_title").innerHTML = stories_title[i];
               document.getElementById(stories[i]+"_modal_title").innerHTML = stories_title[i];
-              document.getElementById(stories[i]+"_summary").innerHTML = stories_content[i].substring(0,550) + "...";
+              if(stories_content[i] != undefined)
+                document.getElementById(stories[i]+"_summary").innerHTML = stories_content[i].substring(0,550) + "...";
               document.getElementById(stories[i]+"_modal_content").innerHTML = stories_content[i];
           }
       }
@@ -694,5 +778,6 @@
             }
       }
       addto_miscellaneous();
+
   </script>
 </html>

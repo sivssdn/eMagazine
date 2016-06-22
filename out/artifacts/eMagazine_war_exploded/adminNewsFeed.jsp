@@ -1,3 +1,8 @@
+<%@ page import="java.util.Calendar" %>
+<%@ page import="process.General" %>
+<%@ page import="process.NewsFeed" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.io.File" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%response.setHeader("X-XSS-Protection", "1; mode=block");%>
 <html>
@@ -42,8 +47,21 @@
 </header>
 <br><br/>
 
-<center><h4> NEWS FEED </h4></center>
-<br/>
+<div class="container">
+    <nav>
+        <div class="nav-wrapper" style="background-color: #795548;">
+            <a href="adminNewsFeed.jsp" class="brand-logo" style="margin-left: 10px">News Feed</a>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="adminEvents.jsp">Events</a></li>
+                <li><a href="adminOtherStories.jsp">Other Stories</a></li>
+                <li><a href="adminMiscellaneous.jsp"> Miscellaneous </a></li>
+                <li><a href="adminMostReadArticles.jsp">Most Read Articles</a></li>
+                <li><a href="adminAdvertisements.jsp">Advertisements</a></li>
+            </ul>
+        </div>
+    </nav>
+</div>
+<br/><br/>
 
 <div class="row">
     <div class="col s12">
@@ -86,21 +104,31 @@
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('newsfeed1ContentEnglish',1);">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in English" name="newsfeed1ContentEnglish"
+                        <textarea class="materialize-textarea" name="newsfeed1ContentEnglish"
                                   id="newsfeed1ContentEnglish"
                                   type="text" onfocus="toggleDisable('newsfeed1ContentEnglish',1);"
                                   length="4096" ></textarea>
+                        <label for="newsfeed1ContentEnglish">Content in English</label>
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('newsfeed1ContentKannada',1);">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in Kannada" name="newsfeed1ContentKannada"
+                        <textarea class="materialize-textarea" name="newsfeed1ContentKannada"
                                   id="newsfeed1ContentKannada"
                                   type="text" onfocus="toggleDisable('newsfeed1ContentKannada',1);"
                                   length="4096"></textarea>
+                        <label for="newsfeed1ContentKannada">Content in Kannada</label>
                     </div>
                     <div class="file-field input-field col s12">
-                        <a class="btn" id="newsfeed1upload" onclick="toggleDisable(this.id,1);"><i class="material-icons left">perm_media</i>Upload File
-                            <input name="newsfeed1File" type="file">
+                        <a class="btn" id="newsfeed1uploadEnglish" onclick="toggleDisable(this.id,1);"><i class="material-icons left">perm_media</i>Upload English File
+                            <input name="newsfeed1FileEnglish" type="file">
+                        </a>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                    </div>
+                    <div class="file-field input-field col s12">
+                        <a class="btn" id="newsfeed1uploadKannada" onclick="toggleDisable(this.id,1);"><i class="material-icons left">perm_media</i>Upload Kannada File
+                            <input name="newsfeed1FileKannada" type="file">
                         </a>
                         <div class="file-path-wrapper">
                             <input class="file-path validate" type="text">
@@ -139,21 +167,31 @@
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('newsfeed2ContentEnglish',2);">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in English" name="newsfeed2ContentEnglish"
+                        <textarea class="materialize-textarea" name="newsfeed2ContentEnglish"
                                   id="newsfeed2ContentEnglish"
                                   type="text" onfocus="toggleDisable('newsfeed2ContentEnglish',2);"
                                   length="4096"></textarea>
+                        <label for="newsfeed2ContentEnglish">Content in English</label>
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('newsfeed2ContentKannada',2);">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in Kannada" name="newsfeed2ContentKannada"
+                        <textarea class="materialize-textarea" name="newsfeed2ContentKannada"
                                   id="newsfeed2ContentKannada"
                                   type="text" onfocus="toggleDisable('newsfeed2ContentKannada',2);"
                                   length="4096"></textarea>
+                        <label for="newsfeed2ContentKannada">Content in Kannada</label>
                     </div>
                     <div class="file-field input-field col s12">
-                        <a class="btn" id="newsfeed2upload" onclick="toggleDisable(this.id,2);"><i class="material-icons left">perm_media</i>Upload File
-                            <input name="newsfeed2File" type="file">
+                        <a class="btn" id="newsfeed2uploadEnglish" onclick="toggleDisable(this.id,2);"><i class="material-icons left">perm_media</i>Upload English File
+                            <input name="newsfeed2FileEnglish" type="file">
+                        </a>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                    </div>
+                    <div class="file-field input-field col s12">
+                        <a class="btn" id="newsfeed2uploadKannada" onclick="toggleDisable(this.id,2);"><i class="material-icons left">perm_media</i>Upload Kannada File
+                            <input name="newsfeed2FileKannada" type="file">
                         </a>
                         <div class="file-path-wrapper">
                             <input class="file-path validate" type="text">
@@ -192,21 +230,31 @@
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('newsfeed3ContentEnglish',3);">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in English" name="newsfeed3ContentEnglish"
+                        <textarea class="materialize-textarea" name="newsfeed3ContentEnglish"
                                   id="newsfeed3ContentEnglish"
                                   type="text" onfocus="toggleDisable('newsfeed3ContentEnglish',3);"
                                   length="4096"></textarea>
+                        <label for="newsfeed3ContentEnglish">Content in English</label>
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('newsfeed3ContentKannada',3);">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in Kannada" name="newsfeed3ContentKannada"
+                        <textarea class="materialize-textarea" name="newsfeed3ContentKannada"
                                   id="newsfeed3ContentKannada"
                                   type="text" onfocus="toggleDisable('newsfeed3ContentKannada',3);"
                                   length="4096"></textarea>
+                        <label for="newsfeed3ContentKannada">Content in Kannada</label>
                     </div>
                     <div class="file-field input-field col s12">
-                        <a class="btn" id="newsfeed3upload" onclick="toggleDisable(this.id,3);"><i class="material-icons left">perm_media</i>Upload File
-                            <input name="newsfeed3File" type="file">
+                        <a class="btn" id="newsfeed3uploadEnglish" onclick="toggleDisable(this.id,3);"><i class="material-icons left">perm_media</i>Upload English File
+                            <input name="newsfeed3FileEnglish" type="file">
+                        </a>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                    </div>
+                    <div class="file-field input-field col s12">
+                        <a class="btn" id="newsfeed3uploadKannada" onclick="toggleDisable(this.id,3);"><i class="material-icons left">perm_media</i>Upload Kannada File
+                            <input name="newsfeed3FileKannada" type="file">
                         </a>
                         <div class="file-path-wrapper">
                             <input class="file-path validate" type="text">
@@ -245,21 +293,31 @@
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('newsfeed4ContentEnglish',4);">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in English" name="newsfeed4ContentEnglish"
+                        <textarea class="materialize-textarea" name="newsfeed4ContentEnglish"
                                   id="newsfeed4ContentEnglish"
                                   type="text" onfocus="toggleDisable('newsfeed4ContentEnglish',4);"
                                   length="4096"></textarea>
+                        <label for="newsfeed4ContentEnglish">Content in English</label>
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('newsfeed4ContentKannada',4);">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in Kannada" name="newsfeed4ContentKannada"
+                        <textarea class="materialize-textarea" name="newsfeed4ContentKannada"
                                   id="newsfeed4ContentKannada"
                                   type="text" onfocus="toggleDisable('newsfeed4ContentKannada',4);"
                                   length="4096"></textarea>
+                        <label for="newsfeed4ContentKannada">Content in Kannada</label>
                     </div>
                     <div class="file-field input-field col s12">
-                        <a class="btn" id="newsfeed4upload" onclick="toggleDisable(this.id,4);"><i class="material-icons left">perm_media</i>Upload File
-                            <input name="newsfeed4File" type="file">
+                        <a class="btn" id="newsfeed4uploadEnglish" onclick="toggleDisable(this.id,4);"><i class="material-icons left">perm_media</i>Upload English File
+                            <input name="newsfeed4FileEnglish" type="file">
+                        </a>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                    </div>
+                    <div class="file-field input-field col s12">
+                        <a class="btn" id="newsfeed4uploadKannada" onclick="toggleDisable(this.id,4);"><i class="material-icons left">perm_media</i>Upload Kannada File
+                            <input name="newsfeed4FileKannada" type="file">
                         </a>
                         <div class="file-path-wrapper">
                             <input class="file-path validate" type="text">
@@ -298,21 +356,31 @@
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('newsfeed5ContentEnglish',5);">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in English" name="newsfeed5ContentEnglish"
+                        <textarea class="materialize-textarea" name="newsfeed5ContentEnglish"
                                   id="newsfeed5ContentEnglish"
                                   type="text" onfocus="toggleDisable('newsfeed5ContentEnglish',5);"
                                   length="4096"></textarea>
+                        <label for="newsfeed5ContentEnglish">Content in English</label>
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('newsfeed5ContentKannada',5);">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in Kannada" name="newsfeed5ContentKannada"
+                        <textarea class="materialize-textarea" name="newsfeed5ContentKannada"
                                   id="newsfeed5ContentKannada"
                                   type="text" onfocus="toggleDisable('newsfeed5ContentKannada',5);"
                                   length="4096"></textarea>
+                        <label for="newsfeed5ContentKannada">Content in Kannada</label>
                     </div>
                     <div class="file-field input-field col s12">
-                        <a class="btn" id="newsfeed5upload" onclick="toggleDisable(this.id,5);"><i class="material-icons left">perm_media</i>Upload File
-                            <input name="newsfeed5File" type="file">
+                        <a class="btn" id="newsfeed5uploadEnglish" onclick="toggleDisable(this.id,5);"><i class="material-icons left">perm_media</i>Upload English File
+                            <input name="newsfeed5FileEnglish" type="file">
+                        </a>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                    </div>
+                    <div class="file-field input-field col s12">
+                        <a class="btn" id="newsfeed5uploadKannada" onclick="toggleDisable(this.id,5);"><i class="material-icons left">perm_media</i>Upload Kannada File
+                            <input name="newsfeed5FileKannada" type="file">
                         </a>
                         <div class="file-path-wrapper">
                             <input class="file-path validate" type="text">
@@ -351,21 +419,31 @@
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('newsfeed6ContentEnglish',6);">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in English" name="newsfeed6ContentEnglish"
+                        <textarea class="materialize-textarea" name="newsfeed6ContentEnglish"
                                   id="newsfeed6ContentEnglish"
                                   type="text" onfocus="toggleDisable('newsfeed6ContentEnglish',6);"
                                   length="4096"></textarea>
+                        <label for="newsfeed6ContentEnglish">Content in English</label>
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('newsfeed6ContentKannada',6);">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in Kannada" name="newsfeed6ContentKannada"
+                        <textarea class="materialize-textarea" name="newsfeed6ContentKannada"
                                   id="newsfeed6ContentKannada"
                                   type="text" onfocus="toggleDisable('newsfeed6ContentKannada',6);"
                                   length="4096"></textarea>
+                        <label for="newsfeed6ContentKannada">Content in Kannada</label>
                     </div>
                     <div class="file-field input-field col s12">
-                        <a class="btn" id="newsfeed6upload" onclick="toggleDisable(this.id,6);"><i class="material-icons left">perm_media</i>Upload File
-                            <input name="newsfeed6File" type="file">
+                        <a class="btn" id="newsfeed6uploadEnglish" onclick="toggleDisable(this.id,6);"><i class="material-icons left">perm_media</i>Upload English File
+                            <input name="newsfeed6FileEnglish" type="file">
+                        </a>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                    </div>
+                    <div class="file-field input-field col s12">
+                        <a class="btn" id="newsfeed6uploadKannada" onclick="toggleDisable(this.id,6);"><i class="material-icons left">perm_media</i>Upload Kannada File
+                            <input name="newsfeed6FileKannada" type="file">
                         </a>
                         <div class="file-path-wrapper">
                             <input class="file-path validate" type="text">
@@ -404,21 +482,31 @@
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('newsfeed7ContentEnglish',7);">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in English" name="newsfeed7ContentEnglish"
+                        <textarea class="materialize-textarea" name="newsfeed7ContentEnglish"
                                   id="newsfeed7ContentEnglish"
                                   type="text" onfocus="toggleDisable('newsfeed7ContentEnglish',7);"
                                   length="4096"></textarea>
+                        <label for="newsfeed7ContentEnglish">Content in English</label>
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('newsfeed7ContentKannada',7);">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in Kannada" name="newsfeed7ContentKannada"
+                        <textarea class="materialize-textarea" name="newsfeed7ContentKannada"
                                   id="newsfeed7ContentKannada"
                                   type="text" onfocus="toggleDisable('newsfeed7ContentKannada',7);"
                                   length="4096"></textarea>
+                        <label for="newsfeed7ContentKannada">Content in Kannada</label>
                     </div>
                     <div class="file-field input-field col s12">
-                        <a class="btn" id="newsfeed7upload" onclick="toggleDisable(this.id,7);"><i class="material-icons left">perm_media</i>Upload File
-                            <input name="newsfeed7File" type="file">
+                        <a class="btn" id="newsfeed7uploadEnglish" onclick="toggleDisable(this.id,7);"><i class="material-icons left">perm_media</i>Upload English File
+                            <input name="newsfeed7FileEnglish" type="file">
+                        </a>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                    </div>
+                    <div class="file-field input-field col s12">
+                        <a class="btn" id="newsfeed7uploadKannada" onclick="toggleDisable(this.id,7);"><i class="material-icons left">perm_media</i>Upload Kannada File
+                            <input name="newsfeed7FileKannada" type="file">
                         </a>
                         <div class="file-path-wrapper">
                             <input class="file-path validate" type="text">
@@ -457,21 +545,31 @@
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('newsfeed8ContentEnglish',8);">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in English" name="newsfeed8ContentEnglish"
+                        <textarea class="materialize-textarea" name="newsfeed8ContentEnglish"
                                   id="newsfeed8ContentEnglish"
                                   type="text" onfocus="toggleDisable('newsfeed8ContentEnglish',8);"
                                   length="4096"></textarea>
+                        <label for="newsfeed8ContentEnglish">Content in English</label>
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('newsfeed8ContentKannada',8);">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in Kannada" name="newsfeed8ContentKannada"
+                        <textarea class="materialize-textarea" name="newsfeed8ContentKannada"
                                   id="newsfeed8ContentKannada"
                                   type="text" onfocus="toggleDisable('newsfeed8ContentKannada',8);"
                                   length="4096"></textarea>
+                        <label for="newsfeed8ContentKannada">Content in Kannada</label>
                     </div>
                     <div class="file-field input-field col s12">
-                        <a class="btn" id="newsfeed8upload" onclick="toggleDisable(this.id,8);"><i class="material-icons left">perm_media</i>Upload File
-                            <input name="newsfeed8File" type="file">
+                        <a class="btn" id="newsfeed8uploadEnglish" onclick="toggleDisable(this.id,8);"><i class="material-icons left">perm_media</i>Upload English File
+                            <input name="newsfeed8FileEnglish" type="file">
+                        </a>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                    </div>
+                    <div class="file-field input-field col s12">
+                        <a class="btn" id="newsfeed8uploadKannada" onclick="toggleDisable(this.id,8);"><i class="material-icons left">perm_media</i>Upload Kannada File
+                            <input name="newsfeed8FileKannada" type="file">
                         </a>
                         <div class="file-path-wrapper">
                             <input class="file-path validate" type="text">
@@ -499,36 +597,126 @@
     var id;
     var newsNumber;
     function toggleDisable(id, newsNumber){
-        var toggleElements = ["newsfeed"+newsNumber+"Link","newsfeed"+newsNumber+"ContentEnglish","newsfeed"+newsNumber+"ContentKannada","newsfeed"+newsNumber+"upload"];
-            if(id == toggleElements[0]){
-                for(var i=1; i<toggleElements.length; i++)
-                    {
-                        document.getElementById(toggleElements[i]).disabled = true;
-                        document.getElementById(toggleElements[i]).value = null;
-                        $("#"+toggleElements[i]).addClass("disabled");
-                        document.getElementsByName("newsfeed"+newsNumber+"File")[0].value = null;
-                    }
-                document.getElementById(toggleElements[0]).disabled = false;
-            }else if(id == toggleElements[1] ||id == toggleElements[2]) {
-                document.getElementById(toggleElements[0]).disabled = true;
-                document.getElementById(toggleElements[0]).value = null;
-                document.getElementById(toggleElements[3]).disabled = true;
-                document.getElementById(toggleElements[3]).value = null;
+        var toggleElements = ["newsfeed"+newsNumber+"Link","newsfeed"+newsNumber+"ContentEnglish","newsfeed"+newsNumber+"ContentKannada","newsfeed"+newsNumber+"uploadEnglish","newsfeed"+newsNumber+"uploadKannada"];
+        if(id == toggleElements[0]){
+            for(var i=1; i<toggleElements.length; i++)
+            {
+                document.getElementById(toggleElements[i]).disabled = true;
+                document.getElementById(toggleElements[i]).value = null;
                 $("#"+toggleElements[3]).addClass("disabled");
-                document.getElementsByName("newsfeed"+newsNumber+"File")[0].value = null;
-
-                document.getElementById(toggleElements[1]).disabled = false;
-                document.getElementById(toggleElements[2]).disabled = false;
-            }else if(id == toggleElements[3]) {
-                for(var i=0; i<3; i++)
-                {
-                    document.getElementById(toggleElements[i]).disabled = true;
-                    document.getElementById(toggleElements[i]).value = null;
-                }
-                $("#"+toggleElements[3]).removeClass("disabled");
+                $("#"+toggleElements[4]).addClass("disabled");
+                document.getElementsByName("newsfeed"+newsNumber+"FileEnglish")[0].value = null;
+                document.getElementsByName("newsfeed"+newsNumber+"FileKannada")[0].value = null;
             }
+
+            document.getElementById(toggleElements[0]).disabled = false;
+        }else if(id == toggleElements[1] ||id == toggleElements[2]) {
+            document.getElementById(toggleElements[0]).disabled = true;
+            document.getElementById(toggleElements[0]).value = null;
+            document.getElementById(toggleElements[3]).disabled = true;
+            document.getElementById(toggleElements[3]).value = null;
+            $("#"+toggleElements[3]).addClass("disabled");
+            $("#"+toggleElements[4]).addClass("disabled");
+            document.getElementsByName("newsfeed"+newsNumber+"FileEnglish")[0].value = null;
+            document.getElementsByName("newsfeed"+newsNumber+"FileKannada")[0].value = null;
+
+
+            document.getElementById(toggleElements[1]).disabled = false;
+            document.getElementById(toggleElements[2]).disabled = false;
+        }else if(id == toggleElements[3] || id == toggleElements[4]) {
+            for(var i=0; i<3; i++)
+            {
+                document.getElementById(toggleElements[i]).disabled = true;
+                document.getElementById(toggleElements[i]).value = null;
+            }
+            $("#"+toggleElements[3]).removeClass("disabled");
+            $("#"+toggleElements[4]).removeClass("disabled");
+        }
 
 
     }
+
+
+    //for autofill content that's present already
+    //for news feed
+    var news_title = [];
+    var news_title_kannada = [];
+    var news_link = [];
+    var news_link_kannada = [];
+    var news_content = [];
+    var news_content_kannada = [];
+
+<%
+        //TEMORARY
+//session.setAttribute("area","mrc");
+//----
+        General escape = new General(); //to escape all the HTML inputs
+        //to select the area
+        String pageToDisplay = "mrc";
+        int isDistrict = 0;
+        int isUlb = 0;
+        if(escape.escapeHtml(request.getParameter("district")) != null ){
+            pageToDisplay = escape.escapeHtml(request.getParameter("district"));
+            isDistrict = 1;
+        }else if(escape.escapeHtml(request.getParameter("ulb")) != null){
+            pageToDisplay = escape.escapeHtml(request.getParameter("ulb"));
+            isUlb = 1;
+        }
+
+        //get status=approved for clients
+        //status=editing for preview purposes
+        String status = "editing";
+
+        //get month
+
+        String[] monthNames = { "January", "February", "March", "April", "May", "June", "July",
+                "August", "September", "October", "November", "December" };
+        Calendar now = Calendar.getInstance();
+        String monthName = monthNames[now.get(Calendar.MONTH)];
+        int year = now.get(Calendar.YEAR);
+        if(escape.escapeHtml(request.getParameter("month")) != null && escape.escapeHtml(request.getParameter("year")) != null)
+        {
+            monthName = escape.escapeHtml(request.getParameter("month"));
+            year =  Integer.parseInt(request.getParameter("year"));
+        }
+
+//for news feed
+
+        NewsFeed news = new NewsFeed();
+        List<NewsFeed> listOfAllNews = news.getNewsFeed(pageToDisplay, year, monthName, status);
+
+                            for(int i=0; i< listOfAllNews.size(); i++){
+                                NewsFeed singleNews = listOfAllNews.get(i);
+
+                                out.print("news_title["+i+"]=\""+escape.escapeHtml(singleNews.getTitle())+"\" ;");
+                                out.print("news_title_kannada["+i+"]=\""+escape.escapeHtml(singleNews.getTitleKannada())+"\" ;");
+                                //out.print("news_link["+i+"]=\""+escape.escapeHtml(singleNews.getLink())+"\" ;");
+                                //out.print("news_link_kannada["+i+"]=\""+escape.escapeHtml(singleNews.getLinkKannada())+"\" ;");
+                                out.print("news_content_kannada["+i+"]=\""+escape.escapeHtml(singleNews.getContentKannada())+"\" ;");
+                                out.print("news_content["+i+"]=\""+escape.escapeHtml(singleNews.getContent())+"\" ;");
+                            }
+
+
+
+%>
+        function addto_newsfeed(){
+        for (var i=0; i<8; i++){
+            if(news_title[i] != undefined)
+                document.getElementById("newsfeed"+(i+1)+"TitleEnglish").value = news_title[i];
+            if(news_title_kannada[i] != undefined)
+                document.getElementById("newsfeed"+(i+1)+"TitleKannada").value = news_title_kannada[i];
+            if(news_link[i] != undefined)
+                document.getElementById("newsfeed"+(i+1)+"Link").value = news_link[i];
+            if(news_content[i] != undefined)
+                document.getElementById("newsfeed"+(i+1)+"ContentEnglish").value = news_content[i];
+            if(news_content_kannada[i] != undefined)
+                document.getElementById("newsfeed"+(i+1)+"ContentKannada").value = news_content_kannada[i];
+            if(news_link[i] != undefined)
+                document.getElementsByClassName("file-path validate")[i].value = news_link[i];
+            if(news_link_kannada[i] != undefined)
+                document.getElementsByClassName("file-path validate")[i+1].value = news_link_kannada[i];
+        }
+    }
+    addto_newsfeed();
 </script>
 </html>

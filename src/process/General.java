@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 
 public class General {
     public String escapeHtml(String inputString){
+
         try{
             return HtmlEscapers.htmlEscaper().escape(inputString);
         }catch(NullPointerException ne){
@@ -54,11 +55,11 @@ public class General {
         return outputWithLink;
     }
 
-    public void compressImages() throws IOException{
-        File input = new File("D:\\compress.jpg");
+    public void imageCompressor(String fileLocation) throws IOException{
+        File input = new File(fileLocation);
         BufferedImage image = ImageIO.read(input);
 
-        File compressedImageFile = new File("D:\\compress.jpg");
+        File compressedImageFile = new File(fileLocation);
         OutputStream os =new FileOutputStream(compressedImageFile);
 
         Iterator<ImageWriter> writers =  ImageIO.getImageWritersByFormatName("jpg");
@@ -102,7 +103,6 @@ public class General {
                 if (monthNames[i].toLowerCase().equals(month.toLowerCase()))
                 {
                     isMonth = true;
-                    System.out.println(monthNames[i].toLowerCase());
                     break;
                 }
 

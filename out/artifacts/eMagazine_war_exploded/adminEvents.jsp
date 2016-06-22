@@ -1,18 +1,27 @@
+<%@ page import="process.Events" %>
+<%@ page import="process.General" %>
+<%@ page import="java.util.Calendar" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Events</title>
-    <SCRIPT type="text/javascript" src="materialize/js/jquery.js"></SCRIPT>
-    <SCRIPT type="text/javascript" src="materialize/js/materialize.min.js"></SCRIPT>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
-    <link href="materialize/css/materialize.min.css" type="text/css" rel="STYLESHEET"/>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="76x76" href="images/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/icon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="images/icon/android-icon-192x192.png">
+    <link rel="manifest" href="images/icon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <!--favicons over-->
 
-    <script>
-        $(document).ready(function () {
-            $('select').material_select();
-        });
-    </script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="msapplication-tap-highlight" content="no">
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
 
 </head>
 <body>
@@ -35,8 +44,22 @@
 </header>
 <br><br/>
 
-<center><h4> EVENTS </h4></center>
-<br/>
+
+<div class="container">
+    <nav>
+        <div class="nav-wrapper" style="background-color: #795548;">
+            <a href="adminEvents.jsp" class="brand-logo" style="margin-left: 10px">Events</a>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="adminNewsFeed.jsp">News Feed</a></li>
+                <li><a href="adminOtherStories.jsp">Other Stories</a></li>
+                <li><a href="adminMiscellaneous.jsp"> Miscellaneous </a></li>
+                <li><a href="adminMostReadArticles.jsp">Most Read Articles</a></li>
+                <li><a href="adminAdvertisements.jsp">Advertisements</a></li>
+            </ul>
+        </div>
+    </nav>
+</div>
+<br/><br/>
 
 
 <div class="row">
@@ -59,7 +82,7 @@
                     <span style="font-size: 1.5em;"> Event 1: </span> <br/>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="event1TitleEnglish" id="event1TitleEnglish" value="bvb" type="text" length="64">
+                        <input name="event1TitleEnglish" id="event1TitleEnglish" type="text" length="64">
                         <label for="event1TitleEnglish">Title in English</label>
                     </div>
                     <div class="input-field col s12">
@@ -69,15 +92,18 @@
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in English" name="event1ContentEnglish" id="event1ContentEnglish"
+                        <textarea class="materialize-textarea" name="event1ContentEnglish" id="event1ContentEnglish"
                                   type="text"
                                   length="4096"></textarea>
+                        <label for="event1ContentEnglish">Content in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in Kannada" name="event1ContentKannada" id="event1ContentKannada"
+                        <textarea class="materialize-textarea" name="event1ContentKannada" id="event1ContentKannada"
                                   type="text"
                                   length="4096"></textarea>
+                        <label for="event1ContentKannada">Content in Kannada</label>
+
                     </div>
                     <br/><br/>
                     <div class="file-field input-field col s12">
@@ -116,15 +142,17 @@
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in English" name="event2ContentEnglish" id="event2ContentEnglish"
+                        <textarea class="materialize-textarea" name="event2ContentEnglish" id="event2ContentEnglish"
                                   type="text"
                                   length="4096"></textarea>
+                        <label for="event2ContentEnglish">Content in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in Kannada" name="event2ContentKannada" id="event2ContentKannada"
+                        <textarea class="materialize-textarea" name="event2ContentKannada" id="event2ContentKannada"
                                   type="text"
                                   length="4096"></textarea>
+                        <label for="event2ContentKannada">Content in Kannada</label>
                     </div>
                     <br/><br/>
                     <div class="file-field input-field col s12">
@@ -163,15 +191,18 @@
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in English" name="event3ContentEnglish" id="event3ContentEnglish"
+                        <textarea class="materialize-textarea" name="event3ContentEnglish" id="event3ContentEnglish"
                                   type="text"
                                   length="4096"></textarea>
+                        <label for="event3ContentEnglish">Content in English</label>
+
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in Kannada" name="event3ContentKannada" id="event3ContentKannada"
+                        <textarea class="materialize-textarea" name="event3ContentKannada" id="event3ContentKannada"
                                   type="text"
                                   length="4096"></textarea>
+                        <label for="event1ContentKannada">Content in Kannada</label>
                     </div>
                     <br/><br/>
                     <div class="file-field input-field col s12">
@@ -210,15 +241,18 @@
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in English" name="event4ContentEnglish" id="event4ContentEnglish"
+                        <textarea class="materialize-textarea" name="event4ContentEnglish" id="event4ContentEnglish"
                                   type="text"
                                   length="4096"></textarea>
+                        <label for="event4ContentEnglish">Content in English</label>
+
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in Kannada" name="event4ContentKannada" id="event4ContentKannada"
+                        <textarea class="materialize-textarea" name="event4ContentKannada" id="event4ContentKannada"
                                   type="text"
                                   length="4096"></textarea>
+                        <label for="event4ContentKannada">Content in Kannada</label>
                     </div>
                     <br/><br/>
                     <div class="file-field input-field col s12">
@@ -257,15 +291,17 @@
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
-                        <textarea placeholder="Content in English" name="event5ContentEnglish" id="event5ContentEnglish"
+                        <textarea class="materialize-textarea" name="event5ContentEnglish" id="event5ContentEnglish"
                                   type="text"
                                   length="4096"></textarea>
+                        <label for="event5ContentEnglish">Content in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea placeholder="Content in Kannada" name="event5ContentKannada" id="event5ContentKannada"
                                   type="text"
                                   length="4096"></textarea>
+                        <label for="event5ContentKannada">Content in Kannada</label>
                     </div>
                     <br/><br/>
                     <div class="file-field input-field col s12">
@@ -289,4 +325,94 @@
 </div>
 
 </body>
+<!--Import jQuery before materialize.js-->
+<script type="text/javascript" src="materialize/js/jquery.js"></script>
+<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+<script>
+    //for popups / modals
+    $(document).ready(function(){
+        // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+
+        $('select').material_select();
+
+
+    });
+    //for events
+    var events_title = [];
+    var events_title_kannada = [];
+    var events_image = [];
+    var events_content = [];
+    var events_content_kannada = [];
+
+<%
+
+        General escape = new General(); //to escape all the HTML inputs
+        //to select the area
+        String pageToDisplay = "mrc";
+        int isDistrict = 0;
+        int isUlb = 0;
+        if(escape.escapeHtml(request.getParameter("district")) != null ){
+            pageToDisplay = escape.escapeHtml(request.getParameter("district"));
+            isDistrict = 1;
+        }else if(escape.escapeHtml(request.getParameter("ulb")) != null){
+            pageToDisplay = escape.escapeHtml(request.getParameter("ulb"));
+            isUlb = 1;
+        }
+
+        //get status=approved for clients
+        //status=editing for preview purposes
+        String status = "editing";
+
+
+        //get month
+
+        String[] monthNames = { "January", "February", "March", "April", "May", "June", "July",
+                "August", "September", "October", "November", "December" };
+        Calendar now = Calendar.getInstance();
+        String monthName = monthNames[now.get(Calendar.MONTH)];
+        int year = now.get(Calendar.YEAR);
+        if(escape.escapeHtml(request.getParameter("month")) != null && escape.escapeHtml(request.getParameter("year")) != null)
+        {
+            monthName = escape.escapeHtml(request.getParameter("month"));
+            year =  Integer.parseInt(request.getParameter("year"));
+        }
+
+
+        //to get all events under the area name
+          Events event = new Events();
+          List<Events> allEvents = event.getAllEvents(pageToDisplay, monthName, year, status);
+          try {
+              for(int i=0; i< allEvents.size(); i++)
+              {
+                    Events singleEvent = allEvents.get(i);
+                    out.println("events_title["+i+"] =\" "+ escape.escapeHtml(singleEvent.getTitle()) + " \" ;");
+                    out.println("events_title_kannada["+i+"] =\" "+ escape.escapeHtml(singleEvent.getTitleKannada()) + " \" ;");
+                    //if(singleEvent.getImagePath() != null )
+                    //out.println("events_image["+i+"] =\" uploaded\"");
+                    out.println("events_content["+i+"] =\" "+ escape.escapeHtml(singleEvent.getEventsContent()) + " \" ;");
+                    out.println("events_content_kannada["+i+"] =\" "+ escape.escapeHtml(singleEvent.getEventsContentKannada()) + " \" ;");
+              }
+          }catch(Exception e){
+              //redirect to error page
+              out.print(e.getMessage());
+          }
+
+%>
+    function addto_events(){
+        for(var i=0; i<5; i++){
+            if(events_title[i] != undefined)
+                document.getElementById("event"+(i+1)+"TitleEnglish").value = events_title[i];
+            if(events_title_kannada[i] != undefined)
+                document.getElementById("event"+(i+1)+"TitleKannada").value = events_title_kannada[i];
+            if(events_content[i] != undefined)
+                document.getElementById("event"+(i+1)+"ContentEnglish").value = events_content[i];
+            if(events_content_kannada[i] != undefined)
+                document.getElementById("event"+(i+1)+"ContentKannada").value = events_content_kannada[i];
+            if(events_image[i] != undefined)
+                document.getElementsByClassName("file-path validate")[i].value = events_image[i];
+        }
+
+    }
+    addto_events();
+        </script>
 </html>

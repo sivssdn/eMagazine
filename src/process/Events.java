@@ -4,16 +4,14 @@ import database.DatabaseManager;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FileUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
-import java.lang.reflect.Array;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,8 +19,26 @@ import java.util.List;
 
 public class Events {
     String title;
+    String titleKannada;
     String imagePath;
     String eventsContent;
+    String eventsContentKannada;
+
+    public String getTitleKannada() {
+        return titleKannada;
+    }
+
+    public void setTitleKannada(String titleKannada) {
+        this.titleKannada = titleKannada;
+    }
+
+    public String getEventsContentKannada() {
+        return eventsContentKannada;
+    }
+
+    public void setEventsContentKannada(String eventsContentKannada) {
+        this.eventsContentKannada = eventsContentKannada;
+    }
 
     public String getTitle() {
         return title;
@@ -49,7 +65,7 @@ public class Events {
     }
 
 
-    public List<Events> getAllEvents(String area, String month, int year){
+    public List<Events> getAllEvents(String area, String month, int year, String status) {
         DatabaseManager db = new DatabaseManager();
         ResultSet eventsFromDb = null;
 
@@ -57,48 +73,47 @@ public class Events {
         List<Events> allEvents = new LinkedList<>();
 
 
-        if (db.success.intern() == "success") {
-            String selectStatement = "SELECT title, image_path, events_content FROM emagazine.public.events WHERE status ILIKE 'APPROVED' AND month = lower(?) AND year = ? AND area = ?;";
-            try {
-                PreparedStatement statement = db.con.prepareStatement(selectStatement);
-                statement.setString(1, month);
-                statement.setInt(2, year);
-                statement.setString(3, area);
+        String selectStatement = "SELECT title, image_path, events_content, title_kannada, events_content_kannada FROM emagazine.public.events WHERE month = lower(?) AND year = ? AND area = ? AND status ILIKE ? ORDER BY serial ASC;";
+        try {
+            PreparedStatement statement = db.con.prepareStatement(selectStatement);
+            statement.setString(1, month);
+            statement.setInt(2, year);
+            statement.setString(3, area);
+            statement.setString(4, status);
 
-                eventsFromDb = db.select(statement);
+            eventsFromDb = db.select(statement);
 
-                while(eventsFromDb.next()){
-                    Events event = new Events();
-                    event.setTitle(eventsFromDb.getString("title"));
-                    event.setImagePath(eventsFromDb.getString("image_path"));
-                    event.setEventsContent(eventsFromDb.getString("events_content"));
+            while (eventsFromDb.next()) {
+                Events event = new Events();
+                event.setTitle(eventsFromDb.getString("title"));
+                event.setTitleKannada(eventsFromDb.getString("title_kannada"));
+                event.setImagePath(eventsFromDb.getString("image_path"));
+                event.setEventsContent(eventsFromDb.getString("events_content"));
+                event.setEventsContentKannada(eventsFromDb.getString("events_content_kannada"));
+                allEvents.add(event);
 
-                    allEvents.add(event);
-                }
-                eventsFromDb.close(); //close resultset
-            }catch(SQLException se){
-                se.printStackTrace();
             }
-
-
+            eventsFromDb.close(); //close resultset
+        } catch (SQLException se) {
+            se.printStackTrace();
         }
+
+
         db.close();
 
         return allEvents;
     }
 
-    public void declareEvent(String month, int year, String area, DatabaseManager db){
+
+    public void declareEvent(String month, int year, String area, DatabaseManager db) {
 
         try {
-            PreparedStatement statement = db.con.prepareStatement("INSERT INTO emagazine.public.events(" +
-                    "            title, image_path, status, month, area, events_content, year, " +
-                    "            serial, title_kannada, events_content_kannada)" +
-                    "    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+            PreparedStatement statement = db.con.prepareStatement("INSERT INTO emagazine.public.events(title, image_path, status, month, area, events_content, year, serial, title_kannada, events_content_kannada)VALUES (?, ?, ?, lower(?), ?, ?, ?, ?, ?, ?);");
 
-            for (int i=1; i<6; i++){
+            for (int i = 1; i < 6; i++) {
                 statement.setString(1, " ");
                 statement.setString(2, " ");
-                statement.setString(3, "editting");
+                statement.setString(3, "editing");
                 statement.setString(4, month);
                 statement.setString(5, area);
                 statement.setString(6, " ");
@@ -109,13 +124,13 @@ public class Events {
                 db.insert(statement);
 
             }
-        }catch(SQLException se){
+        } catch (SQLException se) {
             se.printStackTrace();
         }
 
     }
 
-    public void updateEvent(String directory, int eventNumber, String contentType, HttpServletRequest request, HttpSession session){
+    public void updateEvent(String directory, int eventNumber, String contentType, HttpServletRequest request, HttpSession session) {
 
         String uploadedFilePath = "#";
         String[] eventFields = {"TitleEnglish", "TitleKannada", "ContentEnglish", "ContentKannada"};
@@ -128,72 +143,75 @@ public class Events {
                 ServletFileUpload upload = new ServletFileUpload(factory);
                 List fileItems = upload.parseRequest(request);
 
-
                 Iterator i = fileItems.iterator();
                 while (i.hasNext()) {
                     FileItem fi = (FileItem) i.next();
                     if (!fi.isFormField()) {
                         String fileName = fi.getName();
-
                         //check the file extension
-                        String fileExtension = "";
-                        if(fileName.intern() != "")
-                            fileExtension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
+                        if (fileName.intern() != "") {
+                            String fileExtension = fileName.substring(fileName.lastIndexOf("."), fileName.length()).toLowerCase();
 
-                        //if matches image extension
-                        if(fileExtension.equals("jpg") ) {
-                            //String fileFieldName = fi.getFieldName();
-                            file = new File(directory + fileName);
-                            fi.write(file);
+                            //if matches image extension
+                            if (fileExtension.equals(".jpg") || fileExtension.equals(".jpeg") || fileExtension.equals(".png")) {
+                                file = new File(directory + fileName);
+                                fi.write(file);
+                                uploadedFilePath = directory + fileName;
 
-                            uploadedFilePath = directory + fileName;
+                                //compress uploaded image
+                                General compress = new General();
+                                compress.imageCompressor(uploadedFilePath);
+
+                                //rename file by appending current timestamp
+                                String newFileName = fi.getName().substring(0, fileName.lastIndexOf("."));
+                                newFileName +=String.valueOf(System.currentTimeMillis()) + fileExtension;
+                                FileUtils.moveFile(FileUtils.getFile(uploadedFilePath), FileUtils.getFile(directory + newFileName));
+                                uploadedFilePath = newFileName;
+
+                            }
                         }
 
-                    } else if (fi.isFormField()) {
+                    } else {
 
                         String fieldName = fi.getFieldName();
 
+                        for (int j = 0; j < eventFields.length; j++) {
 
-                        for (int j=0; j<eventFields.length; j++){
-
-                                if(fieldName.equals("event"+eventNumber+eventFields[j]) ){
-                                    eventValues[j] = fi.getString(); //getting values from name attribute of the form
-                                    break;
-                                }
+                            if (fieldName.equals("event" + eventNumber + eventFields[j])) {
+                                eventValues[j] = fi.getString(); //getting the input by checking the name attribute
+                                break;
+                            }
                         }
 
                     }
                 }
+
+                //updating db
+                DatabaseManager db = new DatabaseManager();
+                if (db.success.intern() == "success") {
+
+                    String updateStatement = "UPDATE emagazine.public.events" +
+                            " SET title = ?, title_kannada = ?, events_content = ?, events_content_kannada = ?, image_path = ?" +
+                            " WHERE month = ? AND year = ? AND area = ? AND serial = ? AND status = 'editing';";
+                    PreparedStatement preparedStatement = db.con.prepareStatement(updateStatement);
+                    preparedStatement.setString(1, eventValues[0]);
+                    preparedStatement.setString(2, eventValues[1]);
+                    preparedStatement.setString(3, eventValues[2]);
+                    preparedStatement.setString(4, eventValues[3]);
+                    preparedStatement.setString(5, uploadedFilePath);
+                    preparedStatement.setString(6, session.getAttribute("month").toString());
+                    preparedStatement.setInt(7, Integer.parseInt(session.getAttribute("year").toString()));
+                    preparedStatement.setString(8, session.getAttribute("area").toString());
+                    preparedStatement.setInt(9, eventNumber);
+
+                    db.update(preparedStatement);
+
+                    db.close();
+
+                }
             } catch (Exception e) {
                 System.out.println(e);
             }
-
-            //insert into db
-            DatabaseManager db = new DatabaseManager();
-            if(db.success.intern() == "success"){
-
-                String updateStatement = "UPDATE public.events" +
-                        "   SET title=?, image_path=?, events_content=?, title_kannada=?, events_content_kannada=?" +
-                        " WHERE serial = ? AND month = ? AND year = ? AND area = ? AND status = 'editting';";
-                try {
-                    PreparedStatement statement = db.con.prepareStatement(updateStatement);
-                    statement.setString(1, eventValues[0]);
-                    statement.setString(2, uploadedFilePath);
-                    statement.setString(3, eventValues[2]);
-                    statement.setString(4, eventValues[1]);
-                    statement.setString(5, eventValues[3]);
-
-                    statement.setInt(6, eventNumber);
-                    statement.setString(7, session.getAttribute("month").toString());
-                    statement.setInt(8, Integer.parseInt(session.getAttribute("year").toString()));
-                    statement.setString(9, session.getAttribute("area").toString());
-                    db.update(statement);
-                }catch(SQLException se){
-                    se.printStackTrace();
-                }
-
-            }
-            db.close();
 
         }
     }

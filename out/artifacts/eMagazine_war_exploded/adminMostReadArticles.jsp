@@ -1,3 +1,7 @@
+<%@ page import="process.General" %>
+<%@ page import="process.MostReadArticles" %>
+<%@ page import="java.util.Calendar" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%response.setHeader("X-XSS-Protection", "1; mode=block");%>
 <html>
@@ -43,8 +47,21 @@
 </header>
 <br><br/>
 
-<center><h4> MOST READ ARTICLES </h4></center>
-<br/>
+<div class="container">
+    <nav>
+        <div class="nav-wrapper" style="background-color: #795548;">
+            <a href="adminMostReadArticles.jsp" class="brand-logo" style="margin-left: 10px">Most Read Articles</a>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="adminEvents.jsp">Events</a></li>
+                <li><a href="adminNewsFeed.jsp">News Feed</a></li>
+                <li><a href="adminOtherStories.jsp">Other Stories</a></li>
+                <li><a href="adminMiscellaneous.jsp"> Miscellaneous </a></li>
+                <li><a href="adminAdvertisements.jsp">Advertisements</a></li>
+            </ul>
+        </div>
+    </nav>
+</div>
+<br/><br/>
 
 <div class="row">
     <div class="col s12">
@@ -88,8 +105,16 @@
                     </div>
                 </div>
                 <div class="file-field input-field col s12">
-                    <a class="btn" id="article1upload" onclick="toggleDisable(this.id,1);"><i class="material-icons left">perm_media</i>Upload File
-                        <input name="misc1File" type="file">
+                    <a class="btn" id="article1uploadEnglish" onclick="toggleDisable(this.id,1);"><i class="material-icons left">perm_media</i>Upload File
+                        <input name="mostRead1FileEnglish" type="file">
+                    </a>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                    </div>
+                </div>
+                <div class="file-field input-field col s12">
+                    <a class="btn" id="article1uploadKannada" onclick="toggleDisable(this.id,1);"><i class="material-icons left">perm_media</i>Upload File
+                        <input name="mostRead1FileKannada" type="file">
                     </a>
                     <div class="file-path-wrapper">
                         <input class="file-path validate" type="text">
@@ -127,8 +152,16 @@
                     </div>
                 </div>
                 <div class="file-field input-field col s12">
-                    <a class="btn" id="article2upload" onclick="toggleDisable(this.id,2);"><i class="material-icons left">perm_media</i>Upload File
-                        <input name="misc1File" type="file">
+                    <a class="btn" id="article2uploadEnglish" onclick="toggleDisable(this.id,2);"><i class="material-icons left">perm_media</i>Upload File
+                        <input name="mostRead2FileEnglish" type="file">
+                    </a>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                    </div>
+                </div>
+                <div class="file-field input-field col s12">
+                    <a class="btn" id="article2uploadKannada" onclick="toggleDisable(this.id,2);"><i class="material-icons left">perm_media</i>Upload File
+                        <input name="mostRead2FileKannada" type="file">
                     </a>
                     <div class="file-path-wrapper">
                         <input class="file-path validate" type="text">
@@ -166,8 +199,16 @@
                     </div>
                 </div>
                 <div class="file-field input-field col s12">
-                    <a class="btn" id="article3upload" onclick="toggleDisable(this.id,3);"><i class="material-icons left">perm_media</i>Upload File
-                        <input name="misc1File" type="file">
+                    <a class="btn" id="article3uploadEnglish" onclick="toggleDisable(this.id,3);"><i class="material-icons left">perm_media</i>Upload File
+                        <input name="mostRead3FileEnglish" type="file">
+                    </a>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                    </div>
+                </div>
+                <div class="file-field input-field col s12">
+                    <a class="btn" id="article3uploadKannada" onclick="toggleDisable(this.id,3);"><i class="material-icons left">perm_media</i>Upload File
+                        <input name="mostRead3FileKannada" type="file">
                     </a>
                     <div class="file-path-wrapper">
                         <input class="file-path validate" type="text">
@@ -205,8 +246,16 @@
                     </div>
                 </div>
                 <div class="file-field input-field col s12">
-                    <a class="btn" id="article4upload" onclick="toggleDisable(this.id,4);"><i class="material-icons left">perm_media</i>Upload File
-                        <input name="misc1File" type="file">
+                    <a class="btn" id="article4uploadEnglish" onclick="toggleDisable(this.id,4);"><i class="material-icons left">perm_media</i>Upload File
+                        <input name="mostRead4FileEnglish" type="file">
+                    </a>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                    </div>
+                </div>
+                <div class="file-field input-field col s12">
+                    <a class="btn" id="article4uploadKannada" onclick="toggleDisable(this.id,4);"><i class="material-icons left">perm_media</i>Upload File
+                        <input name="mostRead4FileKannada" type="file">
                     </a>
                     <div class="file-path-wrapper">
                         <input class="file-path validate" type="text">
@@ -244,8 +293,16 @@
                     </div>
                 </div>
                 <div class="file-field input-field col s12">
-                    <a class="btn" id="article5upload" onclick="toggleDisable(this.id,5);"><i class="material-icons left">perm_media</i>Upload File
-                        <input name="misc1File" type="file">
+                    <a class="btn" id="article5uploadEnglish" onclick="toggleDisable(this.id,5);"><i class="material-icons left">perm_media</i>Upload File
+                        <input name="mostRead5FileEnglish" type="file">
+                    </a>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                    </div>
+                </div>
+                <div class="file-field input-field col s12">
+                    <a class="btn" id="article5uploadKannada" onclick="toggleDisable(this.id,5);"><i class="material-icons left">perm_media</i>Upload File
+                        <input name="mostRead5FileKannada" type="file">
                     </a>
                     <div class="file-path-wrapper">
                         <input class="file-path validate" type="text">
@@ -283,8 +340,16 @@
                     </div>
                 </div>
                 <div class="file-field input-field col s12">
-                    <a class="btn" id="article6upload" onclick="toggleDisable(this.id,6);"><i class="material-icons left">perm_media</i>Upload File
-                        <input name="misc1File" type="file">
+                    <a class="btn" id="article6uploadEnglish" onclick="toggleDisable(this.id,6);"><i class="material-icons left">perm_media</i>Upload File
+                        <input name="mostRead6FileEnglish" type="file">
+                    </a>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                    </div>
+                </div>
+                <div class="file-field input-field col s12">
+                    <a class="btn" id="article6uploadKannada" onclick="toggleDisable(this.id,6);"><i class="material-icons left">perm_media</i>Upload File
+                        <input name="mostRead6FileKannada" type="file">
                     </a>
                     <div class="file-path-wrapper">
                         <input class="file-path validate" type="text">
@@ -322,8 +387,16 @@
                     </div>
                 </div>
                 <div class="file-field input-field col s12">
-                    <a class="btn" id="article7upload" onclick="toggleDisable(this.id,7);"><i class="material-icons left">perm_media</i>Upload File
-                        <input name="misc1File" type="file">
+                    <a class="btn" id="article7uploadEnglish" onclick="toggleDisable(this.id,7);"><i class="material-icons left">perm_media</i>Upload File
+                        <input name="mostRead7FileEnglish" type="file">
+                    </a>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                    </div>
+                </div>
+                <div class="file-field input-field col s12">
+                    <a class="btn" id="article7uploadKannada" onclick="toggleDisable(this.id,7);"><i class="material-icons left">perm_media</i>Upload File
+                        <input name="mostRead7FileKannada" type="file">
                     </a>
                     <div class="file-path-wrapper">
                         <input class="file-path validate" type="text">
@@ -361,8 +434,16 @@
                     </div>
                 </div>
                 <div class="file-field input-field col s12">
-                    <a class="btn" id="article8upload" onclick="toggleDisable(this.id,8);"><i class="material-icons left">perm_media</i>Upload File
-                        <input name="misc1File" type="file">
+                    <a class="btn" id="article8uploadEnglish" onclick="toggleDisable(this.id,8);"><i class="material-icons left">perm_media</i>Upload File
+                        <input name="mostRead8FileEnglish" type="file">
+                    </a>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                    </div>
+                </div>
+                <div class="file-field input-field col s12">
+                    <a class="btn" id="article8uploadKannada" onclick="toggleDisable(this.id,8);"><i class="material-icons left">perm_media</i>Upload File
+                        <input name="mostRead8FileKannada" type="file">
                     </a>
                     <div class="file-path-wrapper">
                         <input class="file-path validate" type="text">
@@ -400,8 +481,16 @@
                     </div>
                 </div>
                 <div class="file-field input-field col s12">
-                    <a class="btn" id="article9upload" onclick="toggleDisable(this.id,9);"><i class="material-icons left">perm_media</i>Upload File
-                        <input name="misc1File" type="file">
+                    <a class="btn" id="article9uploadEnglish" onclick="toggleDisable(this.id,9);"><i class="material-icons left">perm_media</i>Upload File
+                        <input name="mostRead9FileEnglish" type="file">
+                    </a>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                    </div>
+                </div>
+                <div class="file-field input-field col s12">
+                    <a class="btn" id="article9uploadKannada" onclick="toggleDisable(this.id,9);"><i class="material-icons left">perm_media</i>Upload File
+                        <input name="mostRead9FileKannada" type="file">
                     </a>
                     <div class="file-path-wrapper">
                         <input class="file-path validate" type="text">
@@ -439,8 +528,16 @@
                     </div>
                 </div>
                 <div class="file-field input-field col s12">
-                    <a class="btn" id="article10upload" onclick="toggleDisable(this.id,10);"><i class="material-icons left">perm_media</i>Upload File
-                        <input name="misc1File" type="file">
+                    <a class="btn" id="article10uploadEnglish" onclick="toggleDisable(this.id,10);"><i class="material-icons left">perm_media</i>Upload File
+                        <input name="mostRead10FileEnglish" type="file">
+                    </a>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                    </div>
+                </div>
+                <div class="file-field input-field col s12">
+                    <a class="btn" id="article10uploadKannada" onclick="toggleDisable(this.id,10);"><i class="material-icons left">perm_media</i>Upload File
+                        <input name="mostRead10FileEnglishKannada" type="file">
                     </a>
                     <div class="file-path-wrapper">
                         <input class="file-path validate" type="text">
@@ -469,18 +566,88 @@
     var id;
     var articleNumber;
     function toggleDisable(id, articleNumber) {
-        var toggleElements = ["article"+articleNumber+"Link","article"+articleNumber+"upload"];
+        var toggleElements = ["article"+articleNumber+"Link","article"+articleNumber+"uploadEnglish","article"+articleNumber+"uploadKannada"];
         if(id == toggleElements[0]){
             $("#"+toggleElements[1]).addClass("disabled");
+            document.getElementsByName("mostRead"+articleNumber+"FileEnglish")[0].value = null; //reset the file input$
+            $("#"+toggleElements[2]).addClass("disabled");
+            document.getElementsByName("mostRead"+articleNumber+"FileKannada")[0].value = null; //reset the file input
+
             document.getElementById(toggleElements[0]).disabled = false;
-            document.getElementsByName("misc1File")[articleNumber-1].value = null; //reset the file input
-        }else if(id == toggleElements[1]){
-            $("#"+toggleElements[1]).removeClass("disabled");
+        }else if(id == toggleElements[1] || id == toggleElements[2]){
             document.getElementById(toggleElements[0]).value = null;
             document.getElementById(toggleElements[0]).disabled = true;
+
+            $("#"+toggleElements[1]).removeClass("disabled");
+            $("#"+toggleElements[2]).removeClass("disabled");
         }
     }
+    //for most read articles
+    var recent_article_title = [];
+    var recent_article_title_kannada = [];
+    var recent_article_link = [];
+    var recent_article_link_kannada = [];
 
-</script>
+<%
+
+        General escape = new General(); //to escape all the HTML inputs
+        //to select the area
+        String pageToDisplay = "mrc";
+        int isDistrict = 0;
+        int isUlb = 0;
+        if(escape.escapeHtml(request.getParameter("district")) != null ){
+            pageToDisplay = escape.escapeHtml(request.getParameter("district"));
+            isDistrict = 1;
+        }else if(escape.escapeHtml(request.getParameter("ulb")) != null){
+            pageToDisplay = escape.escapeHtml(request.getParameter("ulb"));
+            isUlb = 1;
+        }
+
+        //get status=approved for clients
+        //status=editing for preview purposes
+        String status = "editing";
+
+        //get month
+
+        String[] monthNames = { "January", "February", "March", "April", "May", "June", "July",
+                "August", "September", "October", "November", "December" };
+        Calendar now = Calendar.getInstance();
+        String monthName = monthNames[now.get(Calendar.MONTH)];
+        int year = now.get(Calendar.YEAR);
+        if(escape.escapeHtml(request.getParameter("month")) != null && escape.escapeHtml(request.getParameter("year")) != null)
+        {
+            monthName = escape.escapeHtml(request.getParameter("month"));
+            year =  Integer.parseInt(request.getParameter("year"));
+        }
+
+        //for most read articles
+         MostReadArticles recent = new MostReadArticles();
+         List<MostReadArticles> allRecentArticles = recent.getAllRecentArticles(pageToDisplay, monthName, year, status);
+
+                         for(int i=0; i<allRecentArticles.size(); i++)
+                         {
+                                MostReadArticles article = allRecentArticles.get(i);
+
+                                out.print("recent_article_title["+i+"] = \""+ escape.escapeHtml(article.getTitle()) +"\";");
+                                out.print("recent_article_title_kannada["+i+"] = \""+ escape.escapeHtml(article.getTitleKannada()) +"\";");
+                                out.print("recent_article_link["+i+"] = \""+ escape.escapeHtml(article.getLink()) +"\";");
+                                out.print("recent_article_link_kannada["+i+"] = \""+ escape.escapeHtml(article.getLinkKannada()) +"\";");
+                         }
+
+
+%>
+    function addto_mostRead(){
+        for(var i=0; i<10; i++){
+            if(recent_article_title[i] != undefined)
+             document.getElementById("article"+(i+1)+"TitleEnglish").value = recent_article_title[i];
+
+            if(recent_article_title_kannada[i] != undefined)
+                document.getElementById("article"+(i+1)+"TitleKannada").value = recent_article_title_kannada[i];
+
+        }
+
+    }
+    addto_mostRead();
+        </script>
 
 </html>
