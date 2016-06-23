@@ -168,36 +168,39 @@ public class Miscellaneous {
                     if (!fi.isFormField()) {
                         String fileName = fi.getName();
                         //check the file extension
-                        String fileExtension = fileName.substring(fileName.lastIndexOf("."), fileName.length()).toLowerCase();
+                        //String fileExtension;
+                        if(fileName.intern() != "") {
+                            String fileExtension = fileName.substring(fileName.lastIndexOf("."), fileName.length()).toLowerCase();
 
-                        //if matches image extension
-                        if (fileExtension.equals(".jpg") || fileExtension.equals(".jpeg") || fileExtension.equals(".png") ||
-                                fileExtension.equals(".pdf") || fileExtension.equals(".doc") || fileExtension.equals(".docx")
-                                || fileExtension.equals(".xls")) {
-                            //String fileFieldName = fi.getFieldName();
-                            file = new File(directory + fileName);
-                            fi.write(file);
+                            //if matches image extension
+                            if (fileExtension.equals(".jpg") || fileExtension.equals(".jpeg") || fileExtension.equals(".png") ||
+                                    fileExtension.equals(".pdf") || fileExtension.equals(".doc") || fileExtension.equals(".docx")
+                                    || fileExtension.equals(".xls")) {
+                                //String fileFieldName = fi.getFieldName();
+                                file = new File(directory + fileName);
+                                fi.write(file);
 
-                            String fileFieldName = fi.getFieldName();
+                                String fileFieldName = fi.getFieldName();
 
-                            if (fileFieldName.equals("misc" + miscellaneousNumber + "FileEnglish")) {
-                                uploadedEnglishFilePath = directory + fileName;
+                                if (fileFieldName.equals("misc" + miscellaneousNumber + "FileEnglish")) {
+                                    uploadedEnglishFilePath = directory + fileName;
 
-                                //rename file by appending current timestamp
-                                String newFileName = fi.getName().substring(0, fileName.lastIndexOf("."));
-                                newFileName += String.valueOf(System.currentTimeMillis()) + fileExtension;
-                                FileUtils.moveFile(FileUtils.getFile(uploadedEnglishFilePath), FileUtils.getFile(directory + newFileName));
-                                uploadedEnglishFilePath = directory + newFileName;
-                            } else if (fileFieldName.equals("misc" + miscellaneousNumber + "FileKannada")) {
-                                uploadedKanndaFilePath = directory + fileName;
+                                    //rename file by appending current timestamp
+                                    String newFileName = fi.getName().substring(0, fileName.lastIndexOf("."));
+                                    newFileName += String.valueOf(System.currentTimeMillis()) + fileExtension;
+                                    FileUtils.moveFile(FileUtils.getFile(uploadedEnglishFilePath), FileUtils.getFile(directory + newFileName));
+                                    uploadedEnglishFilePath = newFileName;
+                                } else if (fileFieldName.equals("misc" + miscellaneousNumber + "FileKannada")) {
+                                    uploadedKanndaFilePath = directory + fileName;
 
-                                //rename file by appending current timestamp
-                                String newFileName = fi.getName().substring(0, fileName.lastIndexOf("."));
-                                newFileName += String.valueOf(System.currentTimeMillis()) + fileExtension;
-                                FileUtils.moveFile(FileUtils.getFile(uploadedKanndaFilePath), FileUtils.getFile(directory + newFileName));
-                                uploadedKanndaFilePath = directory + newFileName;
+                                    //rename file by appending current timestamp
+                                    String newFileName = fi.getName().substring(0, fileName.lastIndexOf("."));
+                                    newFileName += String.valueOf(System.currentTimeMillis()) + fileExtension;
+                                    FileUtils.moveFile(FileUtils.getFile(uploadedKanndaFilePath), FileUtils.getFile(directory + newFileName));
+                                    uploadedKanndaFilePath = newFileName;
+                                }
+
                             }
-
                         }
 
                     } else if (fi.isFormField()) {

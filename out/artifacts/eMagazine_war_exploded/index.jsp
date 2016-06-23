@@ -8,6 +8,7 @@
 
   <head>
         <script>
+            var language = 0;
             //for events
             var events_title = [];
             var events_title_kannada = [];
@@ -43,6 +44,10 @@
             var miscellaneous_content_kannada = [];
             var miscellaneous_link = [];
             var miscellaneous_link_kannada = [];
+
+            //for advertisements
+            var advertisement_image = [];
+            var advertisement_link = [];
 
       <%
 //TEMORARY
@@ -91,14 +96,11 @@ session.setAttribute("area","mrc");
               {
                     Events singleEvent = allEvents.get(i);
 
-                   //ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-                   //String path = classLoader.getResource(singleEvent.getImagePath()).getPath();
-
                     out.println("events_title["+i+"] =\" "+ escape.escapeHtml(singleEvent.getTitle()) + " \" ;");
                     out.println("events_title_kannada["+i+"] =\" "+ escape.escapeHtml(singleEvent.getTitleKannada()) + " \" ;");
                     out.println("events_image["+i+"] =\"/resources?name="+ escape.escapeHtml(singleEvent.getImagePath()) + " \" ;");
                     out.println("events_content["+i+"] =\" "+ escape.escapeHtml(singleEvent.getEventsContent()) + " \" ;");
-                    out.println("events_content_kannada["+i+"] =\" "+ escape.escapeHtml(singleEvent.getEventsContentKannada()) + " \" ;");
+                    out.println("events_content_kannada["+i+"] =\" "+ singleEvent.getEventsContentKannada() + " \" ;");
               }
           }catch(Exception e){
               //redirect to error page
@@ -191,14 +193,17 @@ session.setAttribute("area","mrc");
 
 
          //for miscellaneous section
-          //General urlContent =  new General();
+          General urlContent =  new General();
           Miscellaneous rows = new Miscellaneous();
           List<Miscellaneous> allMiscellaneous = rows.getAllMiscellaneous(pageToDisplay, monthName, year, status);
                         for(int i=0; i<allMiscellaneous.size(); i++)
                         {
                                 Miscellaneous row = allMiscellaneous.get(i);
 
-                                out.print("miscellaneous_content["+i+"]=\""+escape.escapeHtml(row.getContent())+"\";");
+                                             out.print("miscellaneous_title["+i+"]=\""+row.getTitle()+"\";");
+                                             out.print("miscellaneous_title_kannada["+i+"]=\""+row.getTitleKannada()+"\";");
+
+                                out.print("miscellaneous_content["+i+"]=\""+urlContent.urlExtracter(escape.escapeHtml(row.getContent()))+"\";");
                                 out.print("miscellaneous_content_kannada["+i+"]=\""+escape.escapeHtml(row.getContentKannada())+"\";");
 
                                 String extension = row.getLink();
@@ -206,9 +211,13 @@ session.setAttribute("area","mrc");
                                 {
                                    extension = row.getLink().substring(row.getLink().lastIndexOf('.'), row.getLink().length()).toLowerCase();
                                     if(extension.equals(".jpg") || extension.equals(".jpeg") || extension.equals(".png") || extension.equals(".pdf")){
-                                        out.print("miscellaneous_link["+i+"]=\"/request?name="+row.getLink()+"\";");
-                                        out.print("miscellaneous_link_kannada["+i+"]=\"/request?name="+row.getLinkKannada()+"\";");
-                                    }
+                                        out.print("miscellaneous_link["+i+"]=\"/resources?name="+row.getLink()+"\";");
+                                        out.print("miscellaneous_link_kannada["+i+"]=\"/resources?name="+row.getLinkKannada()+"\";");
+                                    }else
+                                        {
+                                             out.print("miscellaneous_link["+i+"]=\""+row.getLink()+"\";");
+                                             out.print("miscellaneous_link_kannada["+i+"]=\"="+row.getLinkKannada()+"\";");
+                                        }
                                 }else
                                 {
                                             out.print("miscellaneous_link["+i+"]=\""+row.getLink()+"\";");
@@ -217,6 +226,16 @@ session.setAttribute("area","mrc");
 
                         }
 
+            //for advertisements
+            Advertisements addRows = new Advertisements();
+            List<Advertisements> allAdds = addRows.getAllAdvertisement();
+                for(int i=0; i<allAdds.size(); i++)
+                {
+                    Advertisements singleAdd = allAdds.get(i);
+
+                    out.print("advertisement_image["+i+"]=\"/resources?name="+escape.escapeHtml(singleAdd.getImagePath())+"\";");
+                    out.print("advertisement_link["+i+"]=\""+singleAdd.getLink()+"\";");
+                }
 
       %>
       </script>
@@ -295,10 +314,10 @@ session.setAttribute("area","mrc");
               </div>
               <div class="row">
                   <a class="left hide-on-small-and-down" style="margin-top: -3.5em; margin-left: 7%;">
-                      MRC/2016-17/June 001
+                      MRC/<%=year%>/<%=monthName%>> 001
                   </a>
                   <a class="right hide-on-small-and-down" style="margin-top: -3.5em; margin-right: 14%;">
-                      June 2016
+                       <%=monthName%> <%=year%>
                   </a>
               </div>
           </div>
@@ -308,7 +327,16 @@ session.setAttribute("area","mrc");
   <!--after header-->
   <main>
       <div class="container" style="width: 90%;">
-          <p class="light right push-l5"><a href=""><strong> Kannada </strong></a>/ <a href=""><strong>English</strong></a> </p></div>
+          <% if (request.getParameter("error") != null) {%>
+          <div class="row">
+              <div class="col m10 push-m5">
+                  <h5 class="light red-text "><%= request.getParameter("error") %>
+                  </h5>
+              </div>
+          </div>
+          <%}%>
+
+          <p class="light right push-l5"><a href="" onclick="languageChange('kannada');return false;"><strong> Kannada </strong></a>/ <a href="" onclick="languageChange('english');return false;"><strong>English</strong></a> </p></div>
           <div class="row">
                   <!--Events -->
                   <div class="col s12 m5">
@@ -317,11 +345,12 @@ session.setAttribute("area","mrc");
                         <div class="card-image" style="max-height: 18em;">
                           <img src="http://materializecss.com/images/sample-1.jpg" id="event_image">
 
-                          <span class="card-title" id="event_title">Title of the event</span>
                         </div>
                         <div class="card-content" style="min-height: 6em;">
-                          <p id="event_summary">I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
-                          <p><a class="waves-effect waves-light modal-trigger" href="#event_modal">READ MORE </a></p>
+                            <span class="card-title light" id="event_title"></span>
+                            <p><a class="waves-effect waves-light modal-trigger" href="#event_modal">READ MORE </a></p>
+                            <p id="event_summary"><!--event summary--></p>
+
                         </div>
 
                           <div class="card-action">
@@ -345,12 +374,7 @@ session.setAttribute("area","mrc");
                                       <img id="event_modal_image" src="http://materializecss.com/images/sample-1.jpg" style="max-width: 100%;max-height: 40vh;display: block;margin: auto;"/>
                                   </p>
                                   <p id="event_modal_content">
-                                      Content
-                                      In about 260 BCE, Ashoka waged a bitterly destructive war against the state of Kalinga (modern Odisha).[6] He conquered Kalinga, which none of his ancestors had done.[7] He embraced Buddhism after witnessing the mass deaths of the Kalinga War, which he himself had waged out of a desire for conquest. "Ashoka reflected on the war in Kalinga, which reportedly had resulted in more than 100,000 deaths and 150,000 deportations, ending at around 200,000 deaths."[8] Ashoka converted gradually to Buddhism beginning about 263 BCE.[6] He was later dedicated to the propagation of Buddhism across Asia, and established monuments marking several significant sites in the life of Gautama Buddha. "Ashoka regarded Buddhism as a doctrine that could serve as a cultural foundation for political unity."[9] Ashoka is now remembered as a philanthropic administrator. In the Kalinga edicts, he addresses his people as his "children", and mentions that as a father he desires their good.
 
-                                      Ashoka's name "Aśoka" means "painless, without sorrow" in Sanskrit (the a privativum and śoka "pain, distress"). In his edicts, he is referred to as Devānāmpriya (Pali Devānaṃpiya or "The Beloved of the Gods"), and Priyadarśin (Pali Piyadasī or "He who regards everyone with affection"). His fondness for his name's connection to the Saraca asoca tree, or the "Ashoka tree" is also referenced in the Ashokavadana.
-
-                                      H.G. Wells wrote of Ashoka in his book The Outline of History: "Amidst the tens of thousands of names of monarchs that crowd the columns of history, their majesties and graciousnesses and serenities and royal highnesses and the like, the name of Ashoka shines, and shines, almost alone, a star." Along with the Edicts of Ashoka, his legend is related in the 2nd-century CE Ashokavadana ("Narrative of Ashoka", a part of Divyavadana), and in the Sri Lankan text Mahavamsa ("Great Chronicle"). The emblem of the modern Republic of India is an adaptation of the Lion Capital of Ashoka.
                                   </p>
                               </div>
                               <div class="modal-footer">
@@ -369,7 +393,7 @@ session.setAttribute("area","mrc");
                                             <!--Modal for upcoming events-->
                                             <div id="upcoming_events_modal" class="modal modal-fixed-footer " style="width:70%; ">
                                                 <div class="modal-content">
-                                                    <h4 class="light teal-color center">Upcoming events</h4>
+                                                    <h4 class="light teal-color center"> <!----></h4>
                                                     <br>
                                                       <p id="upcoming_events_modal_content"></p>
                                                   </div>
@@ -391,7 +415,7 @@ session.setAttribute("area","mrc");
                   <div class="card blue-grey darken-1" style="min-height: 18em;max-height: 18em;">
 
                           <div class="card-image">
-                                <img src="http://materializecss.com/images/sample-1.jpg"  style="max-height: 100%;">
+                                <a href="" id="advertisement1_link"><img id="advertisement1_image" src=""  style="max-height: 100%;"></a>
                           </div>
 
 
@@ -400,7 +424,7 @@ session.setAttribute("area","mrc");
                       <div class="card blue-grey darken-1" style="min-height: 18em;max-height: 18em;">
 
                               <div class="card-image">
-                                  <img src="http://materializecss.com/images/sample-1.jpg" style="max-height: 100%;">
+                                  <a href="" id="advertisement2_link"><img id="advertisement2_image" src="" style="max-height: 100%;"></a>
                               </div>
 
                        </div>
@@ -416,10 +440,10 @@ session.setAttribute("area","mrc");
                           <h4 class="light teal-color">Other stories : </h4>
                           <div class="card">
                               <div class="card-image" style="max-height: 18em;">
-                                  <img id="story1_image" src="http://materializecss.com/images/office.jpg" />
+                                  <img id="story1_image" src="" />
                               </div>
                               <div class="card-content">
-                                  <span id="story1_title" class="card-title teal-color">Story heading</span>
+                                  <span id="story1_title" class="card-title teal-color"><!--story heading--></span>
                               </div>
                           </div>
                       </div>
@@ -427,8 +451,8 @@ session.setAttribute("area","mrc");
                       <div class="col s12 m7">
                           <br><br><br><br>
                           <p id="story1_summary">
-                              More Content about card on the left goes here...<br>
-                              In about 260 BCE, Ashoka waged a bitterly destructive war against the state of Kalinga (modern Odisha).[6] He conquered Kalinga, which none of his ancestors had done.[7] He embraced Buddhism after witnessing the mass deaths of the Kalinga War, which he himself had waged out of a desire for conquest. "Ashoka reflected on the war in Kalinga, which reportedly had resulted in more than 100,000 deaths and 150,000 deportations, ending at around 200,000 deaths."[8] Ashoka converted gradually to Buddhism beginning about 263 BCE.[6] He was later dedicated to the propagation of Buddhism across Asia, and established monuments...
+
+
                           </p>
 
                           <p><a class="waves-effect waves-light modal-trigger" href="#story1_modal">READ MORE </a></p>
@@ -437,7 +461,7 @@ session.setAttribute("area","mrc");
                                                   <div class="modal-content">
                                                       <h4 class="light teal-color" id="story1_modal_title">Event Name/heading</h4>
                                                       <p>
-                                                          <img id="story1_modal_image" src="http://materializecss.com/images/sample-1.jpg" style="max-width: 100%;max-height: 40vh;display: block;margin: auto;"/>
+                                                          <img id="story1_modal_image" src="" style="max-width: 100%;max-height: 40vh;display: block;margin: auto;"/>
                                                       </p>
                                                       <p id="story1_modal_content">
 
@@ -459,7 +483,7 @@ session.setAttribute("area","mrc");
                       <div class="card-content white-text">
                           <p>
                           <div class="card-image" style="max-height: 22em;">
-                              <img src="http://materializecss.com/images/sample-1.jpg">
+                            <a href="" id="advertisement3_link"><img id="advertisement3_image" src=""></a>
                           </div>
                           </p>
                       </div>
@@ -475,27 +499,27 @@ session.setAttribute("area","mrc");
               <div class="col s12 m4">
                   <div class="card">
                       <div class="card-image" style="max-height: 18em;">
-                          <img id="story2_image" src="http://materializecss.com/images/office.jpg" />
+                          <img id="story2_image" src="" />
                       </div>
                       <div class="card-content">
-                          <span id="story2_title" class="card-title teal-color">Story heading</span>
+                          <span id="story2_title" class="card-title teal-color"><!--story heading--></span>
                       </div>
                   </div>
               </div>
 
               <div class="col s12 m7"> <br>
                               <p id="story2_summary">
-                                  More Content about card on the left goes here...<br>
-                              In about 260 BCE, Ashoka waged a bitterly destructive war against the state of Kalinga (modern Odisha).[6] He conquered Kalinga, which none of his ancestors had done.[7] He embraced Buddhism after witnessing the mass deaths of the Kalinga War, which he himself had waged out of a desire for conquest. "Ashoka reflected on the war in Kalinga, which reportedly had resulted in more than 100,000 deaths and 150,000 deportations, ending at around 200,000 deaths."[8] Ashoka converted gradually to Buddhism beginning about 263 BCE.[6] He was later dedicated to the propagation of Buddhism across Asia, and established monuments...
+
+
                               </p>
 
                           <p><a class="waves-effect waves-light modal-trigger" href="#story2_modal">READ MORE </a></p>
                                               <!--Modal for story 2-->
                                               <div id="story2_modal" class="modal modal-fixed-footer " style="width:70%; ">
                                                   <div class="modal-content">
-                                                      <h4 class="light teal-color" id="story2_modal_title">Event Name/heading</h4>
+                                                      <h4 class="light teal-color" id="story2_modal_title"><!--event name--></h4>
                                                       <p>
-                                                          <img id="story2_modal_image" src="http://materializecss.com/images/sample-1.jpg" style="max-width: 100%;max-height: 40vh;display: block;margin: auto;"/>
+                                                          <img id="story2_modal_image" src="" style="max-width: 100%;max-height: 40vh;display: block;margin: auto;"/>
                                                       </p>
                                                       <p id="story2_modal_content">
 
@@ -517,7 +541,7 @@ session.setAttribute("area","mrc");
                       <div class="card-content white-text">
                           <p>
                           <div class="card-image">
-                              <img src="http://materializecss.com/images/sample-1.jpg" style="max-height: 20em;">
+                            <a href="" id="advertisement4_link"><img id="advertisement4_image" src="" style="max-height: 20em;"></a>
                           </div>
                           </p>
                       </div>
@@ -538,18 +562,18 @@ session.setAttribute("area","mrc");
                                   <!--story section-->
                                   <div class="card">
                                       <div class="card-image" >
-                                          <img id="story3_image" src="http://materializecss.com/images/office.jpg" style="max-height: 18em;"/>
+                                          <img id="story3_image" src="" style="max-height: 18em;"/>
                                       </div>
                                       <div class="card-content">
-                                          <span id="story3_title" class="card-title teal-color">Story heading</span>
+                                          <span id="story3_title" class="card-title teal-color"><!--story heading--></span>
                                       </div>
                                   </div>
                               </div>
 
                               <div class="col s12 m7"> <br>
                                           <p id="story3_summary">
-                                              More Content about card on the left goes here...<br>
-                                              In about 260 BCE, Ashoka waged a bitterly destructive war against the state of Kalinga (modern Odisha).[6] He conquered Kalinga, which none of his ancestors had done.[7] He embraced Buddhism after witnessing the mass deaths of the Kalinga War, which he himself had waged out of a desire for conquest. "Ashoka reflected on the war in Kalinga, which reportedly had resulted in more than 100,000 deaths and 150,000 deportations, ending at around 200,000 deaths."[8] Ashoka converted gradually to Buddhism beginning about 263 BCE.[6] He was later dedicated to the propagation of Buddhism across Asia, and established monuments ...
+
+
 
                                           </p>
                                           <p><a class="waves-effect waves-light modal-trigger" href="#story3_modal">READ MORE </a></p>
@@ -557,9 +581,9 @@ session.setAttribute("area","mrc");
                                                           <!--Modal for story 3-->
                                                           <div id="story3_modal" class="modal modal-fixed-footer " style="width:70%; ">
                                                               <div class="modal-content">
-                                                                  <h4 class="light teal-color" id="story3_modal_title">Event Name/heading</h4>
+                                                                  <h4 class="light teal-color" id="story3_modal_title"><!--Event Name/heading--></h4>
                                                                   <p>
-                                                                      <img id="story3_modal_image" src="http://materializecss.com/images/sample-1.jpg" style="max-width: 100%;max-height: 40vh;display: block;margin: auto;"/>
+                                                                      <img id="story3_modal_image" src="" style="max-width: 100%;max-height: 40vh;display: block;margin: auto;"/>
                                                                   </p>
                                                                   <p id="story3_modal_content">
 
@@ -581,35 +605,38 @@ session.setAttribute("area","mrc");
 
                       </li>
                       <li>
-                          <div class="collapsible-header"><i class="material-icons dp48 teal-dark">info</i><span id="miscellaneous1_title">Health Capsule</span></div>
+                          <div class="collapsible-header"><i class="material-icons dp48 teal-dark">info</i>Health Capsule</div>
                           <div class="collapsible-body">
+                           <a href="" id="miscellaneous1_link"><span id="miscellaneous1_title"><!--content--></span></a><br>
                               <p id="miscellaneous1_content">
-                                  Prevention of Chicken Gunia/Dengue/Tips for good health < link to article>
+                                  <!--content-->
                               </p>
                           </div>
                       </li>
                       <li>
-                          <div class="collapsible-header"><i class="material-icons dp48 teal-dark">info</i><span id="miscellaneous2_title">Interesting Articles on Urban Development</span></div>
+                          <div class="collapsible-header"><i class="material-icons dp48 teal-dark">info</i>Interesting Articles on Urban Development</div>
                           <div class="collapsible-body">
+                              <a href="" id="miscellaneous2_link"><span id="miscellaneous2_title"><!--content--></span></a><br>
                               <p id="miscellaneous2_content">
-                                  article 1 <br>
-                                  article 2 <br>
+                                  <!--content-->
                               </p>
                           </div>
                       </li>
                       <li>
-                          <div class="collapsible-header"><i class="material-icons dp48 teal-dark">info</i><span id="miscellaneous3_title">Bizarre news</span></div>
+                          <div class="collapsible-header"><i class="material-icons dp48 teal-dark">info</i>Bizarre news</div>
                           <div class="collapsible-body">
+                              <a href="" id="miscellaneous3_link"><span id="miscellaneous3_title"><!--content--></span></a><br>
                               <p id="miscellaneous3_content">
-                                  News from the World
+                                  <!--content-->
                               </p>
                           </div>
                       </li>
                       <li>
-                          <div class="collapsible-header"><i class="material-icons dp48 teal-dark">info</i><span id="miscellaneous4_title">Fun Corner</span></div>
+                          <div class="collapsible-header"><i class="material-icons dp48 teal-dark">info</i>Fun Corner</div>
                           <div class="collapsible-body">
+                              <a href="" id="miscellaneous4_link"><span id="miscellaneous4_title"><!--content--></span></a><br>
                               <p id="miscellaneous4_content">
-                                  Joke
+                                  <!--content-->
                               </p>
                           </div>
                       </li>
@@ -634,6 +661,9 @@ session.setAttribute("area","mrc");
 
           </div>
 
+              <% if(status.intern() == "editing"){%>
+                    <p class="light center-align"><a href="controller.jsp?requestFor=approveEdition" class="waves-effect waves-light btn btn-large red">Approve Edition</a></p>
+              <%}%>
       </div>
 
    </main>
@@ -690,17 +720,29 @@ session.setAttribute("area","mrc");
 
       //only for events section (first)
       var id;
-      function change_event(id){
+      function change_event(id) {
 
-          $("#event_title").text(events_title[id]);
-          $("#event_modal_title").text(events_title[id]);
           document.getElementById("event_image").src = events_image[id];
           $("#event_modal_image").text(events_image[id]);
 
-          if(events_content[id] != undefined)
-             document.getElementById("event_summary").innerHTML = events_content[id].substring(0, 100);
-          $("#event_modal_content").text(events_content[id]);
+          if (language == 0) {
 
+          $("#event_title").text(events_title[id]);
+          $("#event_modal_title").text(events_title[id]);
+
+          if (events_content[id] != undefined)
+              document.getElementById("event_summary").innerHTML = events_content[id].substring(0, 50)+" ...";
+
+          $("#event_modal_content").text(events_content[id]);
+         }else if(language == 1){
+              $("#event_title").text(events_title_kannada[id]);
+              $("#event_modal_title").text(events_title_kannada[id]);
+
+              if (events_content[id] != undefined)
+                  document.getElementById("event_summary").innerHTML = events_content_kannada[id].substring(0, 100);
+
+              $("#event_modal_content").text(events_content_kannada[id]);
+          }
 
           //to change active button color (ui)
           $("#0").removeClass("active");
@@ -715,24 +757,49 @@ session.setAttribute("area","mrc");
       //for news feed dynamic creation
       function addto_newsfeed(){
           var table = document.getElementById("news_feed_table");
+          if (language == 0) {
+                    //to clear previous data
+                    while (table.firstChild)
+                    table.removeChild(table.firstChild);
 
+                  var newsfeed_length = news_title.length;
+                  for(var i=0; i<newsfeed_length; i++) {
+                      var tr = document.createElement("tr");
 
+                      var td = document.createElement("td");
+                      if (news_content[i] == "null")
+                          td.innerHTML = "<a href=\'" + news_link[i] + "\'>" + (i + 1) + ". " + news_title[i] + " </a>";
+                      else {
+                          td.innerHTML = "<a href='#upcoming_events_modal'>" + (i + 1) + ". " + news_title[i] + "</a>";
+                          td.className = "waves-effect waves-light modal-trigger";
+                          document.getElementById("upcoming_events_modal_content").innerHTML = news_content[i];
+                      }
+                      tr.appendChild(td);
+                      table.appendChild(tr);
+                  }
+             //merge to table
+          }else if(language == 1){
+              //to clear previous data
+              while (table.firstChild)
+                  table.removeChild(table.firstChild);
 
-          var newsfeed_length = news_title.length;
-          for(var i=0; i<newsfeed_length; i++){
-              var tr = document.createElement("tr");
+              //for kannada
+              var newsfeed_length = news_title_kannada.length;
+              for(var i=0; i<newsfeed_length; i++) {
+                  var tr = document.createElement("tr");
 
-              var td = document.createElement("td");
-              if(news_content[i] == "null")
-              td.innerHTML = "<a href=\'"+news_link[i]+"\'>"+ (i+1) +". "+news_title[i]+" </a>";
-              else{
-                  td.innerHTML = "<a href='#upcoming_events_modal'>"+(i+1) +". "+news_title[i]+"</a>";
-                  td.className = "waves-effect waves-light modal-trigger";
-                  document.getElementById("upcoming_events_modal_content").innerHTML = news_content[i];
+                  var td = document.createElement("td");
+                  if (news_content_kannada[i] == "null")
+                      td.innerHTML = "<a href=\'" + news_link_kannada[i] + "\'>" + (i + 1) + ". " + news_title_kannada[i] + " </a>";
+                  else {
+                      td.innerHTML = "<a href='#upcoming_events_modal'>" + (i + 1) + ". " + news_title_kannada[i] + "</a>";
+                      td.className = "waves-effect waves-light modal-trigger";
+                      document.getElementById("upcoming_events_modal_content").innerHTML = news_content_kannada[i];
+                  }
+                  tr.appendChild(td);
+                  table.appendChild(tr); //merge to table
               }
-              tr.appendChild(td);
 
-              table.appendChild(tr); //merge to table
           }
 
       }
@@ -744,40 +811,106 @@ session.setAttribute("area","mrc");
           for(var i=0; i<3; i++){
               document.getElementById(stories[i]+"_image").src = stories_image[i];
               document.getElementById(stories[i]+"_modal_image").src = stories_image[i];
-              document.getElementById(stories[i]+"_title").innerHTML = stories_title[i];
-              document.getElementById(stories[i]+"_modal_title").innerHTML = stories_title[i];
-              if(stories_content[i] != undefined)
-                document.getElementById(stories[i]+"_summary").innerHTML = stories_content[i].substring(0,550) + "...";
-              document.getElementById(stories[i]+"_modal_content").innerHTML = stories_content[i];
+
+              if(language == 0) {
+                  document.getElementById(stories[i] + "_title").innerHTML = stories_title[i];
+                  document.getElementById(stories[i] + "_modal_title").innerHTML = stories_title[i];
+                  if (stories_content[i] != undefined)
+                      document.getElementById(stories[i] + "_summary").innerHTML = stories_content[i].substring(0, 550) + "...";
+                  document.getElementById(stories[i] + "_modal_content").innerHTML = stories_content[i];
+              }else if(language == 1){
+                  document.getElementById(stories[i] + "_title").innerHTML = stories_title_kannada[i];
+                  document.getElementById(stories[i] + "_modal_title").innerHTML = stories_title_kannada[i];
+                  if (stories_content_kannada[i] != undefined)
+                      document.getElementById(stories[i] + "_summary").innerHTML = stories_content_kannada[i].substring(0, 550) + "...";
+                  document.getElementById(stories[i] + "_modal_content").innerHTML = stories_content_kannada[i];
+              }
           }
       }
       addto_otherstories();
 
       //for recent articles
-      function addto_recentarticles(){
+      function addto_recentarticles() {
           var table = document.getElementById("recent_articles_table");
-          var recentArticlesLength = recent_article_title.length;
 
-                for(var i=0; i<recentArticlesLength; i++){
-                    var tr = document.createElement('tr');
-                    var td = document.createElement('td');
-                    td.innerHTML = "<a href=\'"+recent_article_link[i]+"\'>"+(i+1)+". "+recent_article_title[i]+" </a>";
-                    tr.appendChild(td);
+          if (language == 0) {
+              var recentArticlesLength = recent_article_title.length;
+              for (var i = 0; i < recentArticlesLength; i++) {
+                  var tr = document.createElement('tr');
+                  var td = document.createElement('td');
+                  if (recent_article_title[i] != undefined)
+                      td.innerHTML = "<a href=\'" + recent_article_link[i] + "\'>" + (i + 1) + ". " + recent_article_title[i] + " </a>";
+                  tr.appendChild(td);
 
-                    table.appendChild(tr);
-                }
+                  table.appendChild(tr);
+              }
+         }else if(language == 1){
+              var recentArticlesLength = recent_article_title_kannada.length;
+              for (var i = 0; i < recentArticlesLength; i++) {
+                  var tr = document.createElement('tr');
+                  var td = document.createElement('td');
+                  if (recent_article_title[i] != undefined)
+                      td.innerHTML = "<a href=\'" + recent_article_link_kannada[i] + "\'>" + (i + 1) + ". " + recent_article_title_kannada[i] + " </a>";
+                  tr.appendChild(td);
+
+                  table.appendChild(tr);
+              }
+          }
       }
       addto_recentarticles();
 
       //for miscellaneous section
       function addto_miscellaneous(){
           miscellaneous_elements = ['miscellaneous1','miscellaneous2','miscellaneous3','miscellaneous4'];
-            for(var i=0; i<4; i++){
-                document.getElementById(miscellaneous_elements[i]+"_title").innerText = miscellaneous_title[i];
-                document.getElementById(miscellaneous_elements[i]+"_content").innerHTML = miscellaneous_content[i];
+            if(language == 0) {
+                for (var i = 0; i < 4; i++) {
+                    if (miscellaneous_title[i] != undefined)
+                        document.getElementById(miscellaneous_elements[i] + "_title").innerHTML = miscellaneous_title[i];
+                    if (miscellaneous_content[i] != undefined)
+                        document.getElementById(miscellaneous_elements[i] + "_content").innerHTML = miscellaneous_content[i];
+                    //miscellaneous_link_kannada
+                    if (miscellaneous_link[i] != undefined)
+                        document.getElementById("miscellaneous" +(i+1)+ "_link").href = miscellaneous_link[i];
+                }
+            }else if(language == 1){
+                for (var i = 0; i < 4; i++) {
+                    if (miscellaneous_title != undefined)
+                        document.getElementById(miscellaneous_elements[i] + "_title").innerText = miscellaneous_title_kannada[i];
+                    if (miscellaneous_content[i] != undefined)
+                        document.getElementById(miscellaneous_elements[i] + "_content").innerHTML = miscellaneous_content_kannada[i];
+                    //miscellaneous_link_kannada
+                    if (miscellaneous_link[i] != undefined)
+                        document.getElementById("miscellaneous" + (i + 1) + "_link").href = miscellaneous_link_kannada[i];
+                }
+
             }
       }
       addto_miscellaneous();
+
+      //for advertisements
+      function addto_advertisements(){
+          for(var i=0; i<4; i++){
+              if(advertisement_image[i] != undefined)
+              document.getElementById("advertisement"+(i+1)+"_image").src = advertisement_image[i];
+              document.getElementById("advertisement"+(i+1)+"_link").href = advertisement_link[i];
+          }
+      }
+      addto_advertisements();
+      var x;
+      function languageChange(x){
+            if(x == 'kannada')
+                    language = 1;
+            else
+                    language = 0;
+
+          change_event(0);
+          addto_newsfeed();
+          addto_otherstories();
+          addto_recentarticles();
+          addto_miscellaneous();
+
+      }
+
 
   </script>
 </html>

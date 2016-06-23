@@ -8,7 +8,7 @@
     <title>Dashboard</title>
     <link rel="apple-touch-icon" sizes="76x76" href="images/apple-icon-76x76.png">
     <link rel="apple-touch-icon" sizes="180x180" href="images/icon/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="images/icon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="images/icon/android-icon-192x192.png">
     <link rel="manifest" href="images/icon/manifest.json">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
@@ -21,8 +21,7 @@
     <!--Import Google Icon Font-->
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
-    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
-
+    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection"/>
 
 
 </head>
@@ -79,31 +78,30 @@
     <div id="test1" class="col s12">
         <br/><br/>
         <div class="container">
-            <form action="controller.jsp?requestFor=upload&upload=stories&number=1" method="post" enctype="multipart/form-data">
+            <form action="controller.jsp?requestFor=upload&upload=stories&number=1" method="post"
+                  enctype="multipart/form-data">
                 <div class="row">
                     <span style="font-size: 1.5em;"> Story 1: </span> <br/>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="story1TitleEnglish" id="story1TitleEnglish" type="text" length="64">
+                        <input name="story1TitleEnglish" id="story1TitleEnglish" type="text">
                         <label for="story1TitleEnglish">Title in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="story1TitleKannada" id="story1TitleKannada" type="text" length="64">
+                        <input name="story1TitleKannada" id="story1TitleKannada" type="text">
                         <label for="story1TitleKannada">Title in Kannada</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea id="story1ContentEnglish"
-                                  type="text" class="materialize-textarea"
-                                  length="4096"></textarea>
+                                  type="text" class="materialize-textarea"></textarea>
                         <label for="story1ContentEnglish">Content in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea name="story1ContentKannada" id="story1ContentKannada"
-                                  type="text" class="materialize-textarea"
-                                  length="4096"></textarea>
+                                  type="text" class="materialize-textarea"></textarea>
                         <label for="story1ContentKannada">Content in English</label>
                     </div>
                     <br/><br/>
@@ -128,31 +126,30 @@
     <div id="test2" class="col s12">
         <br/><br/>
         <div class="container">
-            <form action="controller.jsp?requestFor=upload&upload=stories&number=2" method="post" enctype="multipart/form-data">
+            <form action="controller.jsp?requestFor=upload&upload=stories&number=2" method="post"
+                  enctype="multipart/form-data">
                 <div class="row">
                     <span style="font-size: 1.5em;"> Story 2: </span> <br/>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="story2TitleEnglish" id="story2TitleEnglish" type="text" length="64">
+                        <input name="story2TitleEnglish" id="story2TitleEnglish" type="text">
                         <label for="story2TitleEnglish">Title in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="story2TitleKannada" id="story2TitleKannada" type="text" length="64">
+                        <input name="story2TitleKannada" id="story2TitleKannada" type="text">
                         <label for="story2TitleKannada">Title in Kannada</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea name="story2ContentEnglish" id="story2ContentEnglish"
-                                  type="text" class="materialize-textarea"
-                                  length="4096"></textarea>
+                                  type="text" class="materialize-textarea"></textarea>
                         <label for="story2ContentEnglish">Content in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea name="story2ContentKannada" id="story2ContentKannada"
-                                  type="text" class="materialize-textarea"
-                                  length="4096"></textarea>
+                                  type="text" class="materialize-textarea"></textarea>
                         <label for="story2ContentKannada">Content in Kannada</label>
                     </div>
                     <br/><br/>
@@ -177,31 +174,30 @@
     <div id="test3" class="col s12">
         <br/><br/>
         <div class="container">
-            <form action="controller.jsp?requestFor=upload&upload=stories&number=3" method="post" enctype="multipart/form-data">
+            <form action="controller.jsp?requestFor=upload&upload=stories&number=3" method="post"
+                  enctype="multipart/form-data">
                 <div class="row">
                     <span style="font-size: 1.5em;"> Story 3: </span> <br/>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="story3TitleEnglish" id="story3TitleEnglish" type="text" length="64">
+                        <input name="story3TitleEnglish" id="story3TitleEnglish" type="text">
                         <label for="story3TitleEnglish">Title in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="story3TitleKannada" id="story3TitleKannada" type="text" length="64">
+                        <input name="story3TitleKannada" id="story3TitleKannada" type="text">
                         <label for="story3TitleKannada">Title in Kannada</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea name="story3ContentEnglish" id="story3ContentEnglish"
-                                  type="text" class="materialize-textarea"
-                                  length="4096"></textarea>
+                                  type="text" class="materialize-textarea"></textarea>
                         <label for="story3ContentEnglish">Content in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea name="story3ContentKannada" id="story3ContentKannada"
-                                  type="text" class="materialize-textarea"
-                                  length="4096"></textarea>
+                                  type="text" class="materialize-textarea"></textarea>
                         <label for="story3ContentKannada">Content in Kannada</label>
                     </div>
                     <br/><br/>
@@ -226,31 +222,30 @@
     <div id="test4" class="col s12">
         <br/><br/>
         <div class="container">
-            <form action="controller.jsp?requestFor=upload&upload=stories&number=4" method="post" enctype="multipart/form-data">
+            <form action="controller.jsp?requestFor=upload&upload=stories&number=4" method="post"
+                  enctype="multipart/form-data">
                 <div class="row">
                     <span style="font-size: 1.5em;"> Story 4: </span> <br/>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="story4TitleEnglish" id="story4TitleEnglish" type="text" length="64">
+                        <input name="story4TitleEnglish" id="story4TitleEnglish" type="text">
                         <label for="story4TitleEnglish">Title in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="story4TitleKannada" id="story4TitleKannada" type="text" length="64">
+                        <input name="story4TitleKannada" id="story4TitleKannada" type="text">
                         <label for="story4TitleKannada">Title in Kannada</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea name="story4ContentEnglish" id="story4ContentEnglish"
-                                  type="text" class="materialize-textarea"
-                                  length="4096"></textarea>
+                                  type="text" class="materialize-textarea"></textarea>
                         <label for="story4ContentEnglish">Content in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea name="story4ContentKannada" id="story4ContentKannada"
-                                  type="text" class="materialize-textarea"
-                                  length="4096"></textarea>
+                                  type="text" class="materialize-textarea"></textarea>
                         <label for="story4ContentKannada">Content in Kannada</label>
                     </div>
                     <br/><br/>
@@ -275,31 +270,30 @@
     <div id="test5" class="col s12">
         <br/><br/>
         <div class="container">
-            <form action="controller.jsp?requestFor=upload&upload=stories&number=5" method="post" enctype="multipart/form-data">
+            <form action="controller.jsp?requestFor=upload&upload=stories&number=5" method="post"
+                  enctype="multipart/form-data">
                 <div class="row">
                     <span style="font-size: 1.5em;"> Story 5: </span> <br/>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="story5TitleEnglish" id="story5TitleEnglish" type="text" length="64">
+                        <input name="story5TitleEnglish" id="story5TitleEnglish" type="text">
                         <label for="story5TitleEnglish">Title in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="story5TitleKannada" id="story5TitleKannada" type="text" length="64">
+                        <input name="story5TitleKannada" id="story5TitleKannada" type="text">
                         <label for="story5TitleKannada">Title in Kannada</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea name="story5ContentEnglish" id="story5ContentEnglish"
-                                  type="text" class="materialize-textarea"
-                                  length="4096"></textarea>
+                                  type="text" class="materialize-textarea"></textarea>
                         <label for="story5ContentEnglish">Content in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea name="story5ContentKannada" id="story5ContentKannada"
-                                  type="text" class="materialize-textarea"
-                                  length="4096"></textarea>
+                                  type="text" class="materialize-textarea"></textarea>
                         <label for="story5ContentKannada">Content in Kannada</label>
                     </div>
                     <br/><br/>
@@ -389,21 +383,20 @@
 
                         }
     %>
-    function addto_Stories(){
-        for(var i=0; i<5; i++)
-        {
-            if(stories_title[i] != undefined)
-                document.getElementById("story"+(i+1)+"TitleEnglish").value = stories_title[i];
-            if(stories_title_kannada[i] != undefined)
-                document.getElementById("story"+(i+1)+"TitleKannada").value = stories_title_kannada[i];
-            if(stories_content[i] != undefined)
-                document.getElementById("story"+(i+1)+"ContentEnglish").value = stories_content[i];
-            if(stories_content_kannada[i] != undefined)
-                document.getElementById("story"+(i+1)+"ContentKannada").value = stories_content_kannada[i];
-            if(stories_image[i] != undefined)
-            document.getElementsByClassName("file-path validate")[i].value = stories_image[i];
+    function addto_Stories() {
+        for (var i = 0; i < 5; i++) {
+            if (stories_title[i] != undefined)
+                document.getElementById("story" + (i + 1) + "TitleEnglish").value = stories_title[i];
+            if (stories_title_kannada[i] != undefined)
+                document.getElementById("story" + (i + 1) + "TitleKannada").value = stories_title_kannada[i];
+            if (stories_content[i] != undefined)
+                document.getElementById("story" + (i + 1) + "ContentEnglish").value = stories_content[i];
+            if (stories_content_kannada[i] != undefined)
+                document.getElementById("story" + (i + 1) + "ContentKannada").value = stories_content_kannada[i];
+            if (stories_image[i] != undefined)
+                document.getElementsByClassName("file-path validate")[i].value = stories_image[i];
         }
     }
     addto_Stories();
-        </script>
+</script>
 </html>

@@ -70,4 +70,63 @@ public class Edition {
         db.close();
         return exists;
     }
+
+    public boolean approveEdition(String month, int year, String area){
+        DatabaseManager db = new DatabaseManager();
+        if(db.success.intern() == "success"){
+            String updateEdition = "UPDATE public.editions SET status='approved' WHERE month=lower(?) AND year=? AND area=?;";
+            String updateEvents = "UPDATE emagazine.public.events SET status='approved' WHERE month=lower(?) AND year=? AND area=?;";
+            String updateMostRead = "UPDATE emagazine.public.most_read_articles SET status='approved' WHERE month=lower(?) AND year=? AND area=?;";
+            String updateMiscellaneous = "UPDATE emagazine.public.miscellaneous SET status='approved' WHERE month=lower(?) AND year=? AND area=?;";
+            String updateOtherStories = "UPDATE emagazine.public.other_stories SET status='approved' WHERE month=lower(?) AND year=? AND area=?;";
+            String updateNewsFeed = "UPDATE emagazine.public.news_feed SET status='approved' WHERE month=lower(?) AND year=? AND area=?;";
+
+            try {
+
+                PreparedStatement preparedEditionUpdate = db.con.prepareStatement(updateEdition);
+                PreparedStatement preparedEventUpdate = db.con.prepareStatement(updateEvents);
+                PreparedStatement preparedMiscellaneousUpdate = db.con.prepareStatement(updateMiscellaneous);
+                PreparedStatement preparedOtherStoriesUpdate = db.con.prepareStatement(updateOtherStories);
+                PreparedStatement preparedMostReadUpdate = db.con.prepareStatement(updateMostRead);
+                PreparedStatement preparedNewsFeedUpdate = db.con.prepareStatement(updateNewsFeed);
+
+                preparedEditionUpdate.setString(1, month);
+                preparedEditionUpdate.setInt(2, year);
+                preparedEditionUpdate.setString(3, area);
+
+                preparedEventUpdate.setString(1, month);
+                preparedEventUpdate.setInt(2, year);
+                preparedEventUpdate.setString(3, area);
+
+                preparedMiscellaneousUpdate.setString(1, month);
+                preparedMiscellaneousUpdate.setInt(2, year);
+                preparedMiscellaneousUpdate.setString(3, area);
+
+                preparedOtherStoriesUpdate.setString(1, month);
+                preparedOtherStoriesUpdate.setInt(2, year);
+                preparedOtherStoriesUpdate.setString(3, area);
+
+                preparedMostReadUpdate.setString(1, month);
+                preparedMostReadUpdate.setInt(2, year);
+                preparedMostReadUpdate.setString(3, area);
+
+                preparedNewsFeedUpdate.setString(1, month);
+                preparedNewsFeedUpdate.setInt(2, year);
+                preparedNewsFeedUpdate.setString(3, area);
+
+                db.update(preparedEditionUpdate);
+                db.update(preparedEventUpdate);
+                db.update(preparedMiscellaneousUpdate);
+                db.update(preparedOtherStoriesUpdate);
+                db.update(preparedMostReadUpdate);
+                db.update(preparedNewsFeedUpdate);
+
+            }catch(SQLException se){
+                se.printStackTrace();
+                return false;
+            }
+        }
+        db.close();
+        return true;
+    }
 }

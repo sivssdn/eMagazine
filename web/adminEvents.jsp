@@ -82,26 +82,24 @@
                     <span style="font-size: 1.5em;"> Event 1: </span> <br/>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="event1TitleEnglish" id="event1TitleEnglish" type="text" length="64">
+                        <input name="event1TitleEnglish" id="event1TitleEnglish" type="text">
                         <label for="event1TitleEnglish">Title in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="event1TitleKannada" id="event1TitleKannada" type="text" length="64">
+                        <input name="event1TitleKannada" id="event1TitleKannada" type="text">
                         <label for="event1TitleKannada">Title in Kannada</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea class="materialize-textarea" name="event1ContentEnglish" id="event1ContentEnglish"
-                                  type="text"
-                                  length="4096"></textarea>
+                                  type="text"></textarea>
                         <label for="event1ContentEnglish">Content in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea class="materialize-textarea" name="event1ContentKannada" id="event1ContentKannada"
-                                  type="text"
-                                  length="4096"></textarea>
+                                  type="text"></textarea>
                         <label for="event1ContentKannada">Content in Kannada</label>
 
                     </div>
@@ -132,26 +130,24 @@
                     <span style="font-size: 1.5em;"> Event 2: </span> <br/>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="event2TitleEnglish" id="event2TitleEnglish" type="text" length="64">
+                        <input name="event2TitleEnglish" id="event2TitleEnglish" type="text">
                         <label for="event2TitleEnglish">Title in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="event2TitleKannada" id="event2TitleKannada" type="text" length="64">
+                        <input name="event2TitleKannada" id="event2TitleKannada" type="text">
                         <label for="event2TitleKannada">Title in Kannada</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea class="materialize-textarea" name="event2ContentEnglish" id="event2ContentEnglish"
-                                  type="text"
-                                  length="4096"></textarea>
+                                  type="text"></textarea>
                         <label for="event2ContentEnglish">Content in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea class="materialize-textarea" name="event2ContentKannada" id="event2ContentKannada"
-                                  type="text"
-                                  length="4096"></textarea>
+                                  type="text"></textarea>
                         <label for="event2ContentKannada">Content in Kannada</label>
                     </div>
                     <br/><br/>
@@ -181,27 +177,25 @@
                     <span style="font-size: 1.5em;"> Event 3: </span> <br/>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="event3TitleEnglish" id="event3TitleEnglish" type="text" length="64">
+                        <input name="event3TitleEnglish" id="event3TitleEnglish" type="text">
                         <label for="event3TitleEnglish">Title in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="event3TitleKannada" id="event3TitleKannada" type="text" length="64">
+                        <input name="event3TitleKannada" id="event3TitleKannada" type="text">
                         <label for="event3TitleKannada">Title in Kannada</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea class="materialize-textarea" name="event3ContentEnglish" id="event3ContentEnglish"
-                                  type="text"
-                                  length="4096"></textarea>
+                                  type="text"></textarea>
                         <label for="event3ContentEnglish">Content in English</label>
 
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea class="materialize-textarea" name="event3ContentKannada" id="event3ContentKannada"
-                                  type="text"
-                                  length="4096"></textarea>
+                                  type="text"></textarea>
                         <label for="event1ContentKannada">Content in Kannada</label>
                     </div>
                     <br/><br/>
@@ -231,27 +225,25 @@
                     <span style="font-size: 1.5em;"> Event 4: </span> <br/>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="event4TitleEnglish" id="event4TitleEnglish" type="text" length="64">
+                        <input name="event4TitleEnglish" id="event4TitleEnglish" type="text">
                         <label for="event4TitleEnglish">Title in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="event4TitleKannada" id="event4TitleKannada" type="text" length="64">
+                        <input name="event4TitleKannada" id="event4TitleKannada" type="text">
                         <label for="event4TitleKannada">Title in Kannada</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea class="materialize-textarea" name="event4ContentEnglish" id="event4ContentEnglish"
-                                  type="text"
-                                  length="4096"></textarea>
+                                  type="text"></textarea>
                         <label for="event4ContentEnglish">Content in English</label>
 
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea class="materialize-textarea" name="event4ContentKannada" id="event4ContentKannada"
-                                  type="text"
-                                  length="4096"></textarea>
+                                  type="text"></textarea>
                         <label for="event4ContentKannada">Content in Kannada</label>
                     </div>
                     <br/><br/>
@@ -281,26 +273,24 @@
                     <span style="font-size: 1.5em;"> Event 5: </span> <br/>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="event5TitleEnglish" id="event5TitleEnglish" type="text" length="64">
+                        <input name="event5TitleEnglish" id="event5TitleEnglish" type="text">
                         <label for="event5TitleEnglish">Title in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="event5TitleKannada" id="event5TitleKannada" type="text" length="64">
+                        <input name="event5TitleKannada" id="event5TitleKannada" type="text">
                         <label for="event5TitleKannada">Title in Kannada</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea class="materialize-textarea" name="event5ContentEnglish" id="event5ContentEnglish"
-                                  type="text"
-                                  length="4096"></textarea>
+                                  type="text"></textarea>
                         <label for="event5ContentEnglish">Content in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea placeholder="Content in Kannada" name="event5ContentKannada" id="event5ContentKannada"
-                                  type="text"
-                                  length="4096"></textarea>
+                                  type="text"></textarea>
                         <label for="event5ContentKannada">Content in Kannada</label>
                     </div>
                     <br/><br/>

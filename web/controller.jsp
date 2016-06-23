@@ -51,7 +51,38 @@
         }
 
 
-    } else if (requestFor != null && requestFor.intern() == "upload") {
+    }else if(requestFor != null && requestFor.intern() == "approveEdition"){
+
+        String month = session.getAttribute("month").toString();
+        String requestYear = session.getAttribute("year").toString();
+        String area = session.getAttribute("area").toString();
+
+
+                if (month != null && requestYear != null && area != null) { //check if parameter exists
+                    General validation = new General();
+                    int year = Integer.parseInt(requestYear);
+
+                    if (validation.isValidMonth(month, year) && validation.isValidYear(year)) {
+                        Edition magazine = new Edition();
+
+                        if(!magazine.approveEdition(month, year, area))
+                        {
+                           //in case the edition is not approved
+                            response.setStatus(response.SC_MOVED_TEMPORARILY);
+                            response.setHeader("Location", "index.jsp?error=Cannot approve edition");
+                        }else
+                        {
+                            response.setStatus(response.SC_MOVED_TEMPORARILY);
+                            response.setHeader("Location", "createEdition.jsp?error=Edition Approved");
+                        }
+                    }else{
+                        response.setStatus(response.SC_MOVED_TEMPORARILY);
+                        response.setHeader("Location", "index.jsp?error=Month and Year not valid");
+                    }
+                }
+
+            }
+    else if (requestFor != null && requestFor.intern() == "upload") {
 
 
         String upload = request.getParameter("upload");
@@ -125,6 +156,11 @@
 
         String month = validate.escapeHtml(request.getParameter("month"));
         String year = validate.escapeHtml(request.getParameter("year"));
+
+        session.setAttribute("month", month);
+        session.setAttribute("year", year);
         response.setHeader("Location", "index.jsp?status=editing&month="+month+"&year="+year);
     }
+    //TODO: html5 validation, approve button, all character var. db fields to text, session management
+
 %>

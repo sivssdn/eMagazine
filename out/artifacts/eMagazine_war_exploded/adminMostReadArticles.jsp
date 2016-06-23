@@ -90,17 +90,17 @@
                     <span style="font-size: 1.5em;"> Article 1: </span> <br/>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="article1TitleEnglish" id="article1TitleEnglish" type="text" length="64">
+                        <input name="article1TitleEnglish" id="article1TitleEnglish" type="text" >
                         <label for="article1TitleEnglish">Title in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="article1TitleKannada" id="article1TitleKannada" type="text" length="64">
+                        <input name="article1TitleKannada" id="article1TitleKannada" type="text" >
                         <label for="article1TitleKannada">Title in Kannada</label>
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('article1Link',1);">
                         <i class="material-icons prefix">language</i>
-                        <input name="article1Link" id="article1Link" type="text" length="64" onfocus="toggleDisable('article1Link',1);">
+                        <input name="article1Link" id="article1Link" type="text"  onfocus="toggleDisable('article1Link',1);">
                         <label for="article1Link">Link</label>
                     </div>
                 </div>
@@ -137,17 +137,17 @@
                     <span style="font-size: 1.5em;"> Article 2: </span> <br/>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="article2TitleEnglish" id="article2TitleEnglish" type="text" length="64">
+                        <input name="article2TitleEnglish" id="article2TitleEnglish" type="text" >
                         <label for="article2TitleEnglish">Title in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="article2TitleKannada" id="article2TitleKannada" type="text" length="64">
+                        <input name="article2TitleKannada" id="article2TitleKannada" type="text" >
                         <label for="article2TitleKannada">Title in Kannada</label>
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('article2Link',2);">
                         <i class="material-icons prefix">language</i>
-                        <input name="article2Link" id="article2Link" type="text" length="64" onfocus="toggleDisable('article2Link',2);">
+                        <input name="article2Link" id="article2Link" type="text"  onfocus="toggleDisable('article2Link',2);">
                         <label for="article2Link">Link</label>
                     </div>
                 </div>
@@ -184,17 +184,17 @@
                     <span style="font-size: 1.5em;"> Article 3: </span> <br/>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="article3TitleEnglish" id="article3TitleEnglish" type="text" length="64">
+                        <input name="article3TitleEnglish" id="article3TitleEnglish" type="text" >
                         <label for="article3TitleEnglish">Title in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="article3TitleKannada" id="article3TitleKannada" type="text" length="64">
+                        <input name="article3TitleKannada" id="article3TitleKannada" type="text" >
                         <label for="article3TitleKannada">Title in Kannada</label>
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('article3Link',3);">
                         <i class="material-icons prefix">language</i>
-                        <input name="article3Link" id="article3Link" type="text" length="64" onfocus="toggleDisable('article3Link',3);">
+                        <input name="article3Link" id="article3Link" type="text"  onfocus="toggleDisable('article3Link',3);">
                         <label for="article3Link">Link</label>
                     </div>
                 </div>
@@ -231,17 +231,17 @@
                     <span style="font-size: 1.5em;"> Article 4: </span> <br/>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="article4TitleEnglish" id="article4TitleEnglish" type="text" length="64">
+                        <input name="article4TitleEnglish" id="article4TitleEnglish" type="text" >
                         <label for="article4TitleEnglish">Title in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="article4TitleKannada" id="article4TitleKannada" type="text" length="64">
+                        <input name="article4TitleKannada" id="article4TitleKannada" type="text" >
                         <label for="article4TitleKannada">Title in Kannada</label>
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('article4Link',4);">
                         <i class="material-icons prefix">language</i>
-                        <input name="article4Link" id="article4Link" type="text" length="64" onfocus="toggleDisable('article4Link',4);">
+                        <input name="article4Link" id="article4Link" type="text"  onfocus="toggleDisable('article4Link',4);">
                         <label for="article4Link">Link</label>
                     </div>
                 </div>
@@ -278,17 +278,17 @@
                     <span style="font-size: 1.5em;"> Article 5: </span> <br/>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="article5TitleEnglish" id="article5TitleEnglish" type="text" length="64">
+                        <input name="article5TitleEnglish" id="article5TitleEnglish" type="text" >
                         <label for="article5TitleEnglish">Title in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="article5TitleKannada" id="article5TitleKannada" type="text" length="64">
+                        <input name="article5TitleKannada" id="article5TitleKannada" type="text" >
                         <label for="article5TitleKannada">Title in Kannada</label>
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('article5Link',5);">
                         <i class="material-icons prefix">language</i>
-                        <input name="article5Link" id="article5Link" type="text" length="64" onfocus="toggleDisable('article5Link',5);">
+                        <input name="article5Link" id="article5Link" type="text"  onfocus="toggleDisable('article5Link',5);">
                         <label for="article5Link">Link</label>
                     </div>
                 </div>
@@ -325,17 +325,17 @@
                     <span style="font-size: 1.5em;"> Article 6: </span> <br/>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="article6TitleEnglish" id="article6TitleEnglish" type="text" length="64">
+                        <input name="article6TitleEnglish" id="article6TitleEnglish" type="text" >
                         <label for="article6TitleEnglish">Title in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="article6TitleKannada" id="article6TitleKannada" type="text" length="64">
+                        <input name="article6TitleKannada" id="article6TitleKannada" type="text" >
                         <label for="article6TitleKannada">Title in Kannada</label>
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('article6Link',6);">
                         <i class="material-icons prefix">language</i>
-                        <input name="article6Link" id="article6Link" type="text" length="64" onfocus="toggleDisable('article6Link',6);">
+                        <input name="article6Link" id="article6Link" type="text"  onfocus="toggleDisable('article6Link',6);">
                         <label for="article6Link">Link</label>
                     </div>
                 </div>
@@ -372,17 +372,17 @@
                     <span style="font-size: 1.5em;"> Article 7: </span> <br/>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="article7TitleEnglish" id="article7TitleEnglish" type="text" length="64">
+                        <input name="article7TitleEnglish" id="article7TitleEnglish" type="text" >
                         <label for="article7TitleEnglish">Title in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="article7TitleKannada" id="article7TitleKannada" type="text" length="64">
+                        <input name="article7TitleKannada" id="article7TitleKannada" type="text" >
                         <label for="article7TitleKannada">Title in Kannada</label>
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('article7Link',7);">
                         <i class="material-icons prefix">language</i>
-                        <input name="article7Link" id="article7Link" type="text" length="64" onfocus="toggleDisable('article7Link',7);">
+                        <input name="article7Link" id="article7Link" type="text"  onfocus="toggleDisable('article7Link',7);">
                         <label for="article7Link">Link</label>
                     </div>
                 </div>
@@ -419,17 +419,17 @@
                     <span style="font-size: 1.5em;"> Article 8: </span> <br/>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="article8TitleEnglish" id="article8TitleEnglish" type="text" length="64">
+                        <input name="article8TitleEnglish" id="article8TitleEnglish" type="text" >
                         <label for="article8TitleEnglish">Title in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="article8TitleKannada" id="article8TitleKannada" type="text" length="64">
+                        <input name="article8TitleKannada" id="article8TitleKannada" type="text" >
                         <label for="article8TitleKannada">Title in Kannada</label>
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('article8Link',8);">
                         <i class="material-icons prefix">language</i>
-                        <input name="article8Link" id="article8Link" type="text" length="64" onfocus="toggleDisable('article8Link',8);">
+                        <input name="article8Link" id="article8Link" type="text"  onfocus="toggleDisable('article8Link',8);">
                         <label for="article8Link">Link</label>
                     </div>
                 </div>
@@ -466,17 +466,17 @@
                     <span style="font-size: 1.5em;"> Article 9: </span> <br/>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="article9TitleEnglish" id="article9TitleEnglish" type="text" length="64">
+                        <input name="article9TitleEnglish" id="article9TitleEnglish" type="text" >
                         <label for="article9TitleEnglish">Title in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="article9TitleKannada" id="article9TitleKannada" type="text" length="64">
+                        <input name="article9TitleKannada" id="article9TitleKannada" type="text" >
                         <label for="article9TitleKannada">Title in Kannada</label>
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('article9Link',9);">
                         <i class="material-icons prefix">language</i>
-                        <input name="article9Link" id="article9Link" type="text" length="64" onfocus="toggleDisable('article9Link',9);">
+                        <input name="article9Link" id="article9Link" type="text"  onfocus="toggleDisable('article9Link',9);">
                         <label for="article9Link">Link</label>
                     </div>
                 </div>
@@ -513,17 +513,17 @@
                     <span style="font-size: 1.5em;"> Article 10: </span> <br/>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="article10TitleEnglish" id="article10TitleEnglish" type="text" length="64">
+                        <input name="article10TitleEnglish" id="article10TitleEnglish" type="text" >
                         <label for="article10TitleEnglish">Title in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="article10TitleKannada" id="article10TitleKannada" type="text" length="64">
+                        <input name="article10TitleKannada" id="article10TitleKannada" type="text" >
                         <label for="article10TitleKannada">Title in Kannada</label>
                     </div>
                     <div class="input-field col s12" onclick="toggleDisable('article10Link',10);">
                         <i class="material-icons prefix">language</i>
-                        <input name="article10Link" id="article10Link" type="text" length="64" onfocus="toggleDisable('article10Link',10);">
+                        <input name="article10Link" id="article10Link" type="text"  onfocus="toggleDisable('article10Link',10);">
                         <label for="article10Link">Link</label>
                     </div>
                 </div>

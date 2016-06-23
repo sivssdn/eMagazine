@@ -3,6 +3,13 @@
 <%@ page import="java.util.Calendar" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    if(session.getAttribute("email") == null ){
+        response.setStatus(response.SC_MOVED_TEMPORARILY);
+        response.setHeader("Location", "login.jsp");
+    }
+
+%>
 <html>
 <head>
     <title>Dashboard</title>
@@ -83,26 +90,24 @@
                     <span style="font-size: 1.5em;"> Miscellaneous 1: </span> <br/>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="misc1TitleEnglish" id="misc1TitleEnglish" type="text" length="64">
+                        <input name="misc1TitleEnglish" id="misc1TitleEnglish" type="text">
                         <label for="misc1TitleEnglish">Title in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="misc1TitleKannada" id="misc1TitleKannada" type="text" length="64">
+                        <input name="misc1TitleKannada" id="misc1TitleKannada" type="text">
                         <label for="misc1TitleKannada">Title in Kannada</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea class="materialize-textarea" name="misc1ContentEnglish" id="misc1ContentEnglish"
-                                  type="text"
-                                  length="4096"></textarea>
+                                  type="text"></textarea>
                         <label for="misc1ContentEnglish">Content in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea class="materialize-textarea" name="misc1ContentKannada" id="misc1ContentKannada"
-                                  type="text"
-                                  length="4096"></textarea>
+                                  type="text"></textarea>
                         <label for="misc1ContentKannada">Content in Kannada</label>
                     </div>
                     <div class="file-field input-field col s12">
@@ -140,26 +145,24 @@
                     <span style="font-size: 1.5em;"> Miscellaneous 2: </span> <br/>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="misc2TitleEnglish" id="misc2TitleEnglish" type="text" length="64">
+                        <input name="misc2TitleEnglish" id="misc2TitleEnglish" type="text">
                         <label for="misc2TitleEnglish">Title in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">label</i>
-                        <input name="misc2TitleKannada" id="misc2TitleKannada" type="text" length="64">
+                        <input name="misc2TitleKannada" id="misc2TitleKannada" type="text">
                         <label for="misc2TitleKannada">Title in Kannada</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea class="materialize-textarea" name="misc2ContentEnglish" id="misc2ContentEnglish"
-                                  type="text"
-                                  length="4096"></textarea>
+                                  type="text"></textarea>
                         <label for="misc2ContentEnglish">Content in English</label>
                     </div>
                     <div class="input-field col s12">
                         <i class="material-icons prefix">subject</i>
                         <textarea class="materialize-textarea" name="misc2ContentKannada" id="misc2ContentKannada"
-                                  type="text"
-                                  length="4096"></textarea>
+                                  type="text"></textarea>
                         <label for="misc1ContentEnglish">Content in Kannada</label>
                     </div>
                     <div class="file-field input-field col s12">
@@ -198,26 +201,24 @@
                 <span style="font-size: 1.5em;"> Miscellaneous 3: </span> <br/>
                 <div class="input-field col s12">
                     <i class="material-icons prefix">label</i>
-                    <input name="misc3TitleEnglish" id="misc3TitleEnglish" type="text" length="64">
+                    <input name="misc3TitleEnglish" id="misc3TitleEnglish" type="text">
                     <label for="misc3TitleEnglish">Title in English</label>
                 </div>
                 <div class="input-field col s12">
                     <i class="material-icons prefix">label</i>
-                    <input name="misc3TitleKannada" id="misc3TitleKannada" type="text" length="64">
+                    <input name="misc3TitleKannada" id="misc3TitleKannada" type="text">
                     <label for="misc3TitleKannada">Title in Kannada</label>
                 </div>
                 <div class="input-field col s12">
                     <i class="material-icons prefix">subject</i>
                         <textarea class="materialize-textarea" name="misc3ContentEnglish" id="misc3ContentEnglish"
-                                  type="text"
-                                  length="4096"></textarea>
+                                  type="text"></textarea>
                     <label for="misc3ContentEnglish">Content in English</label>
                 </div>
                 <div class="input-field col s12">
                     <i class="material-icons prefix">subject</i>
                         <textarea class="materialize-textarea" name="misc3ContentKannada" id="misc3ContentKannada"
-                                  type="text"
-                                  length="4096"></textarea>
+                                  type="text"></textarea>
                     <label for="misc3ContentKannada">Content in Kannada</label>
                 </div>
                 <div class="file-field input-field col s12">
@@ -256,26 +257,24 @@
                 <span style="font-size: 1.5em;"> Miscellaneous 4: </span> <br/>
                 <div class="input-field col s12">
                     <i class="material-icons prefix">label</i>
-                    <input name="misc4TitleEnglish" id="misc4TitleEnglish" type="text" length="64">
+                    <input name="misc4TitleEnglish" id="misc4TitleEnglish" type="text">
                     <label for="misc4TitleEnglish">Title in English</label>
                 </div>
                 <div class="input-field col s12">
                     <i class="material-icons prefix">label</i>
-                    <input name="misc4TitleKannada" id="misc4TitleKannada" type="text" length="64">
+                    <input name="misc4TitleKannada" id="misc4TitleKannada" type="text">
                     <label for="misc4TitleKannada">Title in Kannada</label>
                 </div>
                 <div class="input-field col s12">
                     <i class="material-icons prefix">subject</i>
                         <textarea class="materialize-textarea" name="misc4ContentEnglish" id="misc4ContentEnglish"
-                                  type="text"
-                                  length="4096"></textarea>
+                                  type="text"></textarea>
                     <label for="misc4ContentEnglish">Content in English</label>
                 </div>
                 <div class="input-field col s12">
                     <i class="material-icons prefix">subject</i>
                         <textarea class="materialize-textarea" name="misc4ContentKannada" id="misc4ContentKannada"
-                                  type="text"
-                                  length="4096"></textarea>
+                                  type="text"></textarea>
                     <label for="misc4ContentKannada">Content in Kannada</label>
                 </div>
                 <div class="file-field input-field col s12">
@@ -374,18 +373,19 @@
     function addto_miscellaneous() {
         for (var i = 0; i < 4; i++) {
             if (miscellaneous_title[i] != undefined)
-                document.getElementById("misc" + (i + 1) + "TitleEnglish").value = miscellaneous_title[i];
+                document.getElementById("misc" + (i+1) + "TitleEnglish").value = miscellaneous_title[i];
             if (miscellaneous_title[i] != undefined)
-                document.getElementById("misc" + (i + 1) + "TitleKannada").value = miscellaneous_title[i];
+                document.getElementById("misc" + (i+1) + "TitleKannada").value = miscellaneous_title[i];
             if (miscellaneous_content[i] != undefined)
-                document.getElementById("misc" + (i + 1) + "ContentEnglish").value = miscellaneous_content[i];
+                document.getElementById("misc" + (i+1) + "ContentEnglish").value = miscellaneous_content[i];
             if (miscellaneous_content_kannada[i] != undefined)
-                document.getElementById("misc" + (i + 1) + "ContentKannada").value = miscellaneous_content_kannada[i];
+                document.getElementById("misc" + (i+1) + "ContentKannada").value = miscellaneous_content_kannada[i];
 
 
         }
 
     }
+    addto_miscellaneous();
 </script>
 
 </html>

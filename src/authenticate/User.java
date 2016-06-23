@@ -1,7 +1,6 @@
 package authenticate;
 
 import database.DatabaseManager;
-import process.Resources;
 
 import java.security.MessageDigest;
 import java.sql.*;
@@ -72,6 +71,27 @@ public class User {
         }
     }
 
+    public boolean checkUserExists (String email){
+        boolean flag = false;
 
+        try{
+
+            DatabaseManager db = new DatabaseManager();
+
+            String statement = "SELECT * FROM eMagazine.public.users WHERE email = ?;";
+            PreparedStatement preparedStatement = db.con.prepareStatement(statement);
+            preparedStatement.setString(1, email);
+            ResultSet rs = db.select(preparedStatement);
+
+            if (rs.next()) {
+                flag = true;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return flag;
+    }
 }
 

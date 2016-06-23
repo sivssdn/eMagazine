@@ -1,6 +1,7 @@
 package process;
 
 import com.google.common.html.HtmlEscapers;
+import com.google.common.io.Files;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -12,30 +13,30 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Path;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class General {
-    public String escapeHtml(String inputString){
+    public String escapeHtml(String inputString) {
 
-        try{
+        try {
             return HtmlEscapers.htmlEscaper().escape(inputString);
-        }catch(NullPointerException ne){
+        } catch (NullPointerException ne) {
             return inputString;
         }
     }
 
 
-
     //extracts url from a string and replaces it with the link for same with html sanitization
     //example foo bar baaz https://www.google.com will return foo bar baaz <a href='https://www.google.com'>LINK</a>
 
-    public String urlExtracter(String input){
-    String outputWithLink="";
+    public String urlExtracter(String input) {
+        String outputWithLink = "";
         //url matcher
-        if(input != null) {
+        if (input != null) {
             Pattern urlPattern = Pattern.compile(
                     "(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)"
                             + "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*"
@@ -55,14 +56,14 @@ public class General {
         return outputWithLink;
     }
 
-    public void imageCompressor(String fileLocation) throws IOException{
+    public void imageCompressor(String fileLocation) throws IOException {
         File input = new File(fileLocation);
         BufferedImage image = ImageIO.read(input);
 
         File compressedImageFile = new File(fileLocation);
-        OutputStream os =new FileOutputStream(compressedImageFile);
+        OutputStream os = new FileOutputStream(compressedImageFile);
 
-        Iterator<ImageWriter> writers =  ImageIO.getImageWritersByFormatName("jpg");
+        Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpg");
         ImageWriter writer = (ImageWriter) writers.next();
 
         ImageOutputStream ios = ImageIO.createImageOutputStream(os);
@@ -84,41 +85,64 @@ public class General {
      * Takes input as a month and checks if it is a valid month and is greater than equalto last month of the present year
      * if the year is greater than present year, then only checks for the valid month name
      * returns true on success
-     * */
-    public boolean isValidMonth(String month, int year){
-        String[] monthNames = { "January", "February", "March", "April", "May", "June", "July",
-                "August", "September", "October", "November", "December" };
+     */
+    public boolean isValidMonth(String month, int year) {
+        String[] monthNames = {"January", "February", "March", "April", "May", "June", "July",
+                "August", "September", "October", "November", "December"};
         boolean isMonth = false;
         Calendar now = Calendar.getInstance();
         int presentMonth = now.get(Calendar.MONTH);
         int presentYear = now.get(Calendar.YEAR);
         int startLoop = 0;
 
-        if(year == presentYear)
+        if (year == presentYear)
             startLoop = presentMonth;
-        else if(year == presentYear + 1)
-                startLoop = 0;
+        else if (year == presentYear + 1)
+            startLoop = 0;
 
-            for (int i = startLoop; i < 12; i++)
-                if (monthNames[i].toLowerCase().equals(month.toLowerCase()))
-                {
-                    isMonth = true;
-                    break;
-                }
+        for (int i = startLoop; i < 12; i++)
+            if (monthNames[i].toLowerCase().equals(month.toLowerCase())) {
+                isMonth = true;
+                break;
+            }
 
         return isMonth;
     }
 
 
-    /**Takes input as a int value and check if the value is equal to current or nect year*/
-    public boolean isValidYear(int year){
+    /**
+     * Takes input as a int value and check if the value is equal to current or nect year
+     */
+    public boolean isValidYear(int year) {
         Calendar cal = Calendar.getInstance();
         int presentYear = cal.get(Calendar.YEAR);
         boolean isValidYear = false;
 
-        if(year == presentYear || year == presentYear+1)
-        isValidYear = true;
+        if (year == presentYear || year == presentYear + 1)
+            isValidYear = true;
 
         return isValidYear;
     }
+
+    /**
+     * To delete a file
+     */
+    public void deleteFile(String fileName) {
+
+        String directory = "/Users/DSV/Desktop/eMagazine/resources/";
+
+        try {
+            String path = directory + fileName;
+            File file = new File(path);
+            if(file.exists()){
+                file.delete();
+            } else {
+                System.out.println("File does not exist");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }

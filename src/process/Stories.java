@@ -172,7 +172,7 @@ public class Stories {
                                 String newFileName = fi.getName().substring(0, fileName.lastIndexOf("."));
                                 newFileName += String.valueOf(System.currentTimeMillis()) + fileExtension;
                                 FileUtils.moveFile(FileUtils.getFile(uploadedFilePath), FileUtils.getFile(directory + newFileName));
-                                uploadedFilePath = directory + newFileName;
+                                uploadedFilePath =  newFileName;
 
                             }
                         }
@@ -180,7 +180,7 @@ public class Stories {
 
                         String fieldName = fi.getFieldName();
 
-                        System.out.println(fi.getString());
+
                         for (int j = 0; j < storiesFields.length; j++) {
 
                             if (fieldName.equals("story" + storyNumber + storiesFields[j])) {
@@ -210,7 +210,7 @@ public class Stories {
                     statement.setString(3, uploadedFilePath);
                     statement.setString(4, storiesValues[1]);
                     statement.setString(5, storiesValues[3]);
-                    System.out.println(statement);
+
                     statement.setInt(6, storyNumber);
                     statement.setString(7, session.getAttribute("month").toString());
                     statement.setInt(8, Integer.parseInt(session.getAttribute("year").toString()));

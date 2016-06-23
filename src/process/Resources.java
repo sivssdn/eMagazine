@@ -13,6 +13,7 @@ public class Resources extends HttpServlet{
 
 
         String imageName = request.getParameter("name");
+        if(imageName.length()>0) {
 
             String path = "C:\\Users\\admin\\IdeaProjects\\eMagazine\\resources\\" + imageName;
 
@@ -32,6 +33,7 @@ public class Resources extends HttpServlet{
                 }
             }
 
+        }
 
     }
 }
