@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eclipse-userlibraries>
+  <library name="postgresql-9.4-1201.jdbc4">
+    <archive path="C:/Users/admin/IdeaProjects/eMagazine/lib/postgresql-9.4-1201.jdbc4.jar" />
+  </library>
+</eclipse-userlibraries>
+

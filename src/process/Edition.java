@@ -7,16 +7,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Edition {
-    String month;
-    int year;
-    String area;
+
     public Events event;
     public NewsFeed news;
     public Stories story;
     public MostReadArticles article;
     public Miscellaneous miscell;
 
-    public void createEdition(String month,int year,String area){
+    public void editionArea(String area){
+        switch(area){
+            case "abc" :
+
+        }
+    }
+    /**
+     * responsible for creating new edition, takes input as month, year and area for which the new edition needs to be created
+     * */
+    public void createEdition(String month, int year, String area) {
         DatabaseManager db = new DatabaseManager();
         if (db.success.intern() == "success") {
             try {
@@ -47,23 +54,28 @@ public class Edition {
         db.close();
     }
 
-    public boolean editionExists(String month,int year,String area){
+    /**
+     * check if the edition already exists
+     * */
+    public boolean editionExists(String month, int year, String area, String status) {
         DatabaseManager db = new DatabaseManager();
         boolean exists = false;
-        if(db.success.intern() == "success"){
+        if (db.success.intern() == "success") {
             try {
-                PreparedStatement statement = db.con.prepareStatement("SELECT area FROM public.editions WHERE month = lower(?) AND year = ? AND area = ?;");
+                PreparedStatement statement = db.con.prepareStatement("SELECT area FROM emagazine.public.editions WHERE month = lower(?) AND year = ? AND area = ? AND status = lower(?);");
                 statement.setString(1, month);
                 statement.setInt(2, year);
                 statement.setString(3, area);
+                statement.setString(4, status);
                 ResultSet editionsInDb = db.select(statement);
 
-                        while (editionsInDb.next()) //ideally should only be one
-                        {
-                                exists = true;
-                        }
+                while (editionsInDb.next()) //ideally should only be one
+                {
+                    exists = true;
+                }
                 editionsInDb.close();
-            }catch(SQLException se){
+            } catch (SQLException se) {
+                se.printStackTrace();
                 return true; //to prevent creating new editions in case of database exceptions
             }
         }
@@ -71,9 +83,12 @@ public class Edition {
         return exists;
     }
 
-    public boolean approveEdition(String month, int year, String area){
+    /**
+     * used for approving edition corresponding to input month, year and area
+     * */
+    public boolean approveEdition(String month, int year, String area) {
         DatabaseManager db = new DatabaseManager();
-        if(db.success.intern() == "success"){
+        if (db.success.intern() == "success") {
             String updateEdition = "UPDATE public.editions SET status='approved' WHERE month=lower(?) AND year=? AND area=?;";
             String updateEvents = "UPDATE emagazine.public.events SET status='approved' WHERE month=lower(?) AND year=? AND area=?;";
             String updateMostRead = "UPDATE emagazine.public.most_read_articles SET status='approved' WHERE month=lower(?) AND year=? AND area=?;";
@@ -121,7 +136,7 @@ public class Edition {
                 db.update(preparedMostReadUpdate);
                 db.update(preparedNewsFeedUpdate);
 
-            }catch(SQLException se){
+            } catch (SQLException se) {
                 se.printStackTrace();
                 return false;
             }

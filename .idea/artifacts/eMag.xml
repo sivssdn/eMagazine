@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="eMag">
-    <output-path>$PROJECT_DIR$/out/artifacts/eMag</output-path>
-    <root id="archive" name="eMag.war">
-      <element id="artifact" artifact-name="eMag exploded" />
-    </root>
-  </artifact>
-</component>

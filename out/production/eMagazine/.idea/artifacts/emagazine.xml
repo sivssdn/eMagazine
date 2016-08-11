@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="emagazine">
+    <output-path>$PROJECT_DIR$/out/artifacts/emagazine</output-path>
+    <root id="archive" name="emagazine.war">
+      <element id="artifact" artifact-name="eMag exploded" />
+    </root>
+  </artifact>
+</component>

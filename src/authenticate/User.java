@@ -7,6 +7,9 @@ import java.sql.*;
 
 public class User {
 
+    /**
+     * takes in input as user email ad password and returns corresponding area in the database.
+     * */
     public String checkValidUserAndGetArea(String email, String password) {
         String area = "";
 
@@ -33,6 +36,9 @@ public class User {
         return area;
     }
 
+    /**Used for creating new user
+     * takes input as email, password and area and inserts them into database
+     * */
     public void createNewUser(String email, String password, String area) {
         try {
             DatabaseManager db = new DatabaseManager();
@@ -53,6 +59,9 @@ public class User {
         }
     }
 
+    /**
+     * takes in input as password string in clear text and returns its sha256 equivalent hash as string
+     * */
     public String hash(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -71,6 +80,10 @@ public class User {
         }
     }
 
+    /**
+     * takes input as email string and checks if the user already exists in the database
+     * returns boolean true if user exists
+     * */
     public boolean checkUserExists (String email){
         boolean flag = false;
 

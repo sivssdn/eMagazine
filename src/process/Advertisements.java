@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,34 +34,38 @@ public class Advertisements {
         this.link = link;
     }
 
-    public List<Advertisements> getAllAdvertisement(){
+    public List<Advertisements> getAllAdvertisement() {
 
         DatabaseManager db = new DatabaseManager();
         List<Advertisements> allAdvertisements = new LinkedList<>();
 
-        if(db.success.intern() == "success"){
-            String selectStatement = "SELECT serial, image_path, link FROM emagazine.public.advertisement WHERE true ORDER BY serial ASC;";
-            try{
+        if (db.success.intern() == "success") {
+            String selectStatement = "SELECT serial, image_path, link FROM emagazine.public.advertisements WHERE true ORDER BY serial ASC;";
+            try {
                 PreparedStatement statement = db.con.prepareStatement(selectStatement);
 
                 ResultSet advertisementRows = db.select(statement);
 
-                while(advertisementRows!= null && advertisementRows.next()){
+                while (advertisementRows != null && advertisementRows.next()) {
                     Advertisements singleAdvertisement = new Advertisements();
                     singleAdvertisement.setImagePath(advertisementRows.getString("image_path"));
                     singleAdvertisement.setLink(advertisementRows.getString("link"));
 
                     allAdvertisements.add(singleAdvertisement);
                 }
-                advertisementRows.close();
-            }catch(SQLException se){
+                //advertisementRows.close();
+            } catch (Exception se) {
                 se.printStackTrace();
             }
         }
         db.close();
         return allAdvertisements;
     }
+
     public void updateAdvertisements(String directory, int advertisementNumber, String contentType, HttpServletRequest request) {
+
+        DatabaseManager db = new DatabaseManager();
+
 
         String uploadedFilePath = "#";
         String link = "#";
@@ -86,15 +89,31 @@ public class Advertisements {
 
                             //if matches image extension
                             if (fileExtension.equals(".jpg") || fileExtension.equals(".jpeg") || fileExtension.equals(".png") || fileExtension.equals(".gif")) {
+
+                                if (db.success.intern() == "success") {
+                                    String selectImagePathStatement = "SELECT image_path FROM emagazine.public.advertisements WHERE  serial = ? ORDER BY serial ASC;";
+                                    PreparedStatement preparedStatement = db.con.prepareStatement(selectImagePathStatement);
+
+                                    preparedStatement.setInt(1, advertisementNumber);
+
+                                    String imgPath;
+                                    ResultSet row = db.select(preparedStatement);
+                                    while (row.next()) {
+                                        imgPath = directory + row.getString("image_path");
+                                        General fileMethod = new General();
+                                        fileMethod.deleteFile(imgPath);
+                                    }
+                                }
+
                                 file = new File(directory + fileName);
                                 fi.write(file);
                                 uploadedFilePath = fileName;
 
 
                                 //compress if not .gif
-                                if(!fileExtension.equals(".gif")){
+                                if (!fileExtension.equals(".gif")) {
                                     General compress = new General();
-                                    compress.imageCompressor(uploadedFilePath);
+                                    compress.imageCompressor(directory + uploadedFilePath);
                                 }
 
                             }
@@ -104,16 +123,15 @@ public class Advertisements {
 
                         String fieldName = fi.getFieldName();
 
-                            if (fieldName.equals("ad" + advertisementNumber + "Link")) {
-                                link = fi.getString(); //getting the input by checking the name attribute
-                            }
+                        if (fieldName.equals("ad" + advertisementNumber + "Link")) {
+                            link = fi.getString(); //getting the input by checking the name attribute
                         }
-
                     }
+
+                }
 
 
                 //updating db
-                DatabaseManager db = new DatabaseManager();
                 if (db.success.intern() == "success") {
                     String updateStatement = "UPDATE emagazine.public.advertisements" +
                             " SET image_path = ?, link = ?" +
@@ -124,13 +142,14 @@ public class Advertisements {
                     preparedStatement.setInt(3, advertisementNumber);
 
                     db.update(preparedStatement);
-
                     db.close();
                 }
             } catch (Exception e) {
+                //noinspection ThrowablePrintedToSystemOut
                 System.out.println(e);
             }
 
         }
     }
+
 }

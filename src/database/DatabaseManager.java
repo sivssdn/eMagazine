@@ -1,21 +1,20 @@
 package database;
 
-import java.sql.Connection;
 import java.sql.*;
-import java.sql.DriverManager;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 public class DatabaseManager {
 
     public Connection con;
     private ResultSet rs;
-    private PreparedStatement st;
     public String success;
 
 
-    public DatabaseManager(){
+    public DatabaseManager() {
 
 
         con = null;
-        st = null;
         rs = null;
 
 
@@ -23,19 +22,28 @@ public class DatabaseManager {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
 
-            success="failed";
+            success = "failed";
 
         }
         try {
-              con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/emagazine", "mrc", "mrc");
-              con.setAutoCommit(false); //to enable transactions
-              success = "success";
-        } catch (SQLException e) {
-            success="failed";
+            //to get user name and password from .properties file
+
+            Locale locale = new Locale("en", "US");
+            //           ResourceBundle bundle = ResourceBundle.getBundle("bundles" + File.separator + "credentials", locale);
+            ResourceBundle bundle = ResourceBundle.getBundle("database.credentials", locale);
+
+
+            con = DriverManager.getConnection(bundle.getString("db.url"), bundle.getString("db.username"), bundle.getString("db.password"));
+            con.setAutoCommit(false); //to enable transactions
+            success = "success";
+
+        } catch (Exception e) {
+            success = "failed";
             //System.out.print(e.getMessage());
         }
 
     }
+
 
     /**
      * performs insert query on database specified by sqlStatement query
@@ -43,7 +51,7 @@ public class DatabaseManager {
      */
     public String insert(PreparedStatement insertStatement) {
         String success = "inserted";
-        st = null;
+
         try {
             //preparing insert statement
             //st = con.prepareStatement(insertStatement);
@@ -60,7 +68,7 @@ public class DatabaseManager {
                     return success;
                 }
             }
-             //e.printStackTrace(); //TO BE REMOVED
+            //e.printStackTrace(); //TO BE REMOVED
             //System.out.println(e.getMessage());
             //success = "failed";
             success = e.getMessage();
@@ -72,7 +80,7 @@ public class DatabaseManager {
 
     //for select statement on mysql db
     public ResultSet select(PreparedStatement selectStatement) {
-        //st = null;
+
         rs = null;
         try {
 
@@ -90,7 +98,7 @@ public class DatabaseManager {
      */
     public String update(PreparedStatement updateStatement) {
         String success = "success";
-        //st = null;
+
         try {
             //st = con.prepareStatement(updateStatement);
             updateStatement.executeUpdate();
@@ -123,13 +131,6 @@ public class DatabaseManager {
         if (con != null) {   //closing connection
             try {
                 con.close();
-            } catch (Exception e) {
-                //Ignore
-            }
-        }
-        if (st != null) {
-            try {
-                st.close();
             } catch (Exception e) {
                 //Ignore
             }

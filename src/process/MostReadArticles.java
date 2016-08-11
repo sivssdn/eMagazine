@@ -6,6 +6,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -74,7 +75,9 @@ public class MostReadArticles {
 
 
                 ResultSet articlesInDB = db.select(statement);
-                while (articlesInDB.next()) {
+
+
+                 while (articlesInDB.next()) {
                     MostReadArticles singleArticle = new MostReadArticles();
                     singleArticle.setTitle(articlesInDB.getString("title"));
                     singleArticle.setTitleKannada(articlesInDB.getString("title_kannada"));
@@ -123,8 +126,12 @@ public class MostReadArticles {
 
     public void updateMostRead(String directory, int articleNumber, String contentType, HttpServletRequest request, HttpSession session) {
 
-        String[] mostReadFields = {"TitleEnglish", "TitleKannada", "Link","Link_kannada"};
+        String[] mostReadFields = {"TitleEnglish", "TitleKannada", "Link", "Link_kannada"};
         String[] mostReadValues = new String[mostReadFields.length];
+
+        DatabaseManager db = new DatabaseManager();
+        String selectFileStatement = "";
+        String dbColumnField = "";
 
 
         File file;
@@ -148,34 +155,53 @@ public class MostReadArticles {
 
                         //if matches image extension
                         if (fileExtension.equals(".jpg") || fileExtension.equals(".jpeg") || fileExtension.equals(".png") ||
-                                fileExtension.equals(".pdf") || fileExtension.equals(".doc") || fileExtension.equals(".docx")
-                                || fileExtension.equals(".xls")) {
+                                fileExtension.equals(".pdf")) {
                             file = new File(directory + fileName);
                             fi.write(file);
 
                             //uploadedFilePath = directory + fileName;
 
                             //rename file by appending current timestamp
-                            String newFileName = fi.getName().substring(0, fileName.lastIndexOf("."));
-                            newFileName +=String.valueOf(System.currentTimeMillis()) + fileExtension;
+                            String newFileName = fileName.substring(0, fileName.lastIndexOf("."));
+                            newFileName += String.valueOf(System.currentTimeMillis()) + fileExtension;
                             FileUtils.moveFile(FileUtils.getFile(directory + fileName), FileUtils.getFile(directory + newFileName));
 
 
-                            if(fi.getFieldName().equals("mostRead"+articleNumber+"FileEnglish"))
-                                mostReadValues[2] = directory + newFileName; //initialized to # in case of null
-                            else
-                                mostReadValues[3] = directory + newFileName;
-                        }
+                            if (fi.getFieldName().equals("mostRead" + articleNumber + "FileEnglish")) {
+                                mostReadValues[2] = newFileName; //initialized to # in case of null
+                                selectFileStatement = "SELECT link FROM emagazine.public.most_read_articles WHERE month = lower(?) AND year = ? AND area = ? AND serial = ? AND status = 'editing';";
+                                dbColumnField = "link";
+                            } else {
+                                mostReadValues[3] = newFileName;
+                                selectFileStatement = "SELECT link_kannada FROM emagazine.public.most_read_articles WHERE month = lower(?) AND year = ? AND area = ? AND serial = ? AND status = 'editing';";
+                                dbColumnField = "link_kannada";
+                            }
 
+                            if (db.success.intern() == "success") {
+                                PreparedStatement preparedStatement = db.con.prepareStatement(selectFileStatement);
+                                preparedStatement.setString(1, session.getAttribute("month").toString());
+                                preparedStatement.setInt(2, Integer.parseInt(session.getAttribute("year").toString()));
+                                preparedStatement.setString(3, session.getAttribute("area").toString());
+                                preparedStatement.setInt(4, articleNumber);
+
+                                String path;
+                                ResultSet row = db.select(preparedStatement);
+                                while (row.next()) {
+                                    path = directory + row.getString(dbColumnField);
+                                    General fileMethod = new General();
+                                    fileMethod.deleteFile(path);
+                                }
+                            }
+                        }
                     } else if (fi.isFormField()) {
 
                         String fieldName = fi.getFieldName();
                         for (int j = 0; j < mostReadFields.length; j++) {
 
                             //for other request.getParameter
-                             if (fieldName.equals("article" + articleNumber + mostReadFields[j])) {
-                                if(fi.getString() != null)
-                                mostReadValues[j] = fi.getString(); //getting values from name attribute of the form
+                            if (fieldName.equals("article" + articleNumber + mostReadFields[j])) {
+                                if (fi.getString() != null)
+                                    mostReadValues[j] = StringEscapeUtils.unescapeJavaScript(fi.getString()); //getting values from name attribute of the form
                                 break;
                             }
                         }
@@ -187,26 +213,54 @@ public class MostReadArticles {
             }
 
 
-            DatabaseManager db = new DatabaseManager();
             if (db.success.intern() == "success") {
 
-                String updateStatement = "UPDATE public.most_read_articles" +
-                        "   SET title=?, link=?, title_kannada=?, link_kannada=?" +
-                        " WHERE serial = ? AND month = ? AND year = ? AND area = ? AND status = 'editing';";
+                int counter = 3;
                 try {
+                    String updateStatement;
+                    PreparedStatement statement;
 
-                    PreparedStatement statement = db.con.prepareStatement(updateStatement);
+                    if((mostReadValues[2] != null && mostReadValues[2].length() > 2) && (mostReadValues[3] != null && mostReadValues[3].length() > 2)) {
+
+                        updateStatement = "UPDATE public.most_read_articles" +
+                                "   SET title=?,  title_kannada=?,  link=?, link_kannada=?" +
+                                " WHERE serial = ? AND month = lower(?) AND year = ? AND area = ? AND status = 'editing';";
+                        statement = db.con.prepareStatement(updateStatement);
+                        statement.setString(counter++ , mostReadValues[2]); //counter = 3
+                        statement.setString(counter++ , mostReadValues[3]); //counter = 4
+
+                    }else if(mostReadValues[2] == null && (mostReadValues[3] != null && mostReadValues[3].length() > 2)){
+
+                        updateStatement = "UPDATE public.most_read_articles" +
+                                "   SET title=?,  title_kannada=?, link_kannada=?" +
+                                " WHERE serial = ? AND month = lower(?) AND year = ? AND area = ? AND status = 'editing';";
+                        statement = db.con.prepareStatement(updateStatement);
+                        statement.setString(counter++ , mostReadValues[3]); //counter = 3
+
+                    }else if((mostReadValues[2] != null && mostReadValues[2].length() > 2) && mostReadValues[3] == null){
+                        updateStatement = "UPDATE public.most_read_articles" +
+                                "   SET title=?,  title_kannada=?,  link=?" +
+                                " WHERE serial = ? AND month = lower(?) AND year = ? AND area = ? AND status = 'editing';";
+                        statement = db.con.prepareStatement(updateStatement);
+                        statement.setString(counter++ , mostReadValues[2]); //counter = 3
+
+                    }else{
+                        //if the link field is empty then update without it
+                        updateStatement = "UPDATE public.most_read_articles" +
+                                "   SET title=?, title_kannada=?" +
+                                " WHERE serial = ? AND month = lower(?) AND year = ? AND area = ? AND status = 'editing';";
+                        statement = db.con.prepareStatement(updateStatement);
+
+                    }
                     statement.setString(1, mostReadValues[0]);
-                    statement.setString(2, mostReadValues[2]);
-                    statement.setString(3, mostReadValues[1]);
-                    statement.setString(4, mostReadValues[3]);
+                    statement.setString(2, mostReadValues[1]);
 
-                    statement.setInt(5, articleNumber);
-                    statement.setString(6, session.getAttribute("month").toString());
-                    statement.setInt(7, Integer.parseInt(session.getAttribute("year").toString()));
-                    statement.setString(8, session.getAttribute("area").toString());
+                    statement.setInt(counter++ , articleNumber);
+                    statement.setString(counter++ , session.getAttribute("month").toString());
+                    statement.setInt(counter++ , Integer.parseInt(session.getAttribute("year").toString()));
+                    statement.setString(counter , session.getAttribute("area").toString());
                     db.update(statement);
-
+System.out.println(statement);
                 } catch (SQLException se) {
                     se.printStackTrace();
                 }

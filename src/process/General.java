@@ -1,8 +1,5 @@
 package process;
 
-import com.google.common.html.HtmlEscapers;
-import com.google.common.io.Files;
-
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
@@ -13,13 +10,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.file.Path;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class General {
+/*
     public String escapeHtml(String inputString) {
 
         try {
@@ -28,11 +25,11 @@ public class General {
             return inputString;
         }
     }
+*/
 
-
-    //extracts url from a string and replaces it with the link for same with html sanitization
-    //example foo bar baaz https://www.google.com will return foo bar baaz <a href='https://www.google.com'>LINK</a>
-
+    /**extracts url from a string and replaces it with the link for same with html sanitization
+    example foo bar baaz https://www.google.com will return foo bar baaz <a href='https://www.google.com'>LINK</a>
+     */
     public String urlExtracter(String input) {
         String outputWithLink = "";
         //url matcher
@@ -59,6 +56,7 @@ public class General {
     public void imageCompressor(String fileLocation) throws IOException {
         File input = new File(fileLocation);
         BufferedImage image = ImageIO.read(input);
+
 
         File compressedImageFile = new File(fileLocation);
         OutputStream os = new FileOutputStream(compressedImageFile);
@@ -96,7 +94,7 @@ public class General {
         int startLoop = 0;
 
         if (year == presentYear)
-            startLoop = presentMonth;
+            startLoop = presentMonth - 1; //one month before present month
         else if (year == presentYear + 1)
             startLoop = 0;
 
@@ -111,7 +109,7 @@ public class General {
 
 
     /**
-     * Takes input as a int value and check if the value is equal to current or nect year
+     * Takes input as a int value and check if the value is equal to current or next year
      */
     public boolean isValidYear(int year) {
         Calendar cal = Calendar.getInstance();
@@ -127,17 +125,12 @@ public class General {
     /**
      * To delete a file
      */
-    public void deleteFile(String fileName) {
-
-        String directory = "/Users/DSV/Desktop/eMagazine/resources/";
+    public void deleteFile(String filePath) {
 
         try {
-            String path = directory + fileName;
-            File file = new File(path);
-            if(file.exists()){
+            File file = new File(filePath);
+            if (file.exists()) {
                 file.delete();
-            } else {
-                System.out.println("File does not exist");
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -5,6 +5,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -123,7 +124,7 @@ public class Miscellaneous {
                     "            miscellaneous_content_kannada, link, link_kannada)" +
                     "    VALUES (lower(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
-            for (int i = 1; i < 5; i++) {
+            for (int i = 1; i < 4; i++) {
                 statement.setString(1, month);
                 statement.setInt(2, year);
                 statement.setString(3, "editing");
@@ -153,6 +154,8 @@ public class Miscellaneous {
         String[] miscellaneousFields = {"TitleEnglish", "TitleKannada", "ContentEnglish", "ContentKannada"};
         String[] miscellaneousValues = new String[miscellaneousFields.length];
 
+        DatabaseManager db = new DatabaseManager();
+
         File file;
         if ((contentType.indexOf("multipart/form-data") >= 0)) {
             try {
@@ -169,14 +172,17 @@ public class Miscellaneous {
                         String fileName = fi.getName();
                         //check the file extension
                         //String fileExtension;
-                        if(fileName.intern() != "") {
+                        if (fileName.intern() != "") {
                             String fileExtension = fileName.substring(fileName.lastIndexOf("."), fileName.length()).toLowerCase();
 
                             //if matches image extension
                             if (fileExtension.equals(".jpg") || fileExtension.equals(".jpeg") || fileExtension.equals(".png") ||
-                                    fileExtension.equals(".pdf") || fileExtension.equals(".doc") || fileExtension.equals(".docx")
-                                    || fileExtension.equals(".xls")) {
+                                    fileExtension.equals(".pdf")) {
                                 //String fileFieldName = fi.getFieldName();
+
+                                String selectFileStatement = "";
+                                String dbColumnField = "";
+
                                 file = new File(directory + fileName);
                                 fi.write(file);
 
@@ -185,19 +191,44 @@ public class Miscellaneous {
                                 if (fileFieldName.equals("misc" + miscellaneousNumber + "FileEnglish")) {
                                     uploadedEnglishFilePath = directory + fileName;
 
+                                    selectFileStatement = "SELECT link FROM emagazine.public.miscellaneous WHERE month = lower(?) AND year = ? AND area = ? AND serial = ? AND status = 'editing';";
+                                    dbColumnField = "link";
+
                                     //rename file by appending current timestamp
-                                    String newFileName = fi.getName().substring(0, fileName.lastIndexOf("."));
+                                    //String newFileName = fi.getName().substring(0, fileName.lastIndexOf("."));
+                                    String newFileName = fileName.substring(0, fileName.lastIndexOf("."));
                                     newFileName += String.valueOf(System.currentTimeMillis()) + fileExtension;
                                     FileUtils.moveFile(FileUtils.getFile(uploadedEnglishFilePath), FileUtils.getFile(directory + newFileName));
                                     uploadedEnglishFilePath = newFileName;
+
                                 } else if (fileFieldName.equals("misc" + miscellaneousNumber + "FileKannada")) {
                                     uploadedKanndaFilePath = directory + fileName;
+
+                                    selectFileStatement = "SELECT link_kannada FROM emagazine.public.miscellaneous WHERE month = lower(?) AND year = ? AND area = ? AND serial = ? AND status = 'editing';";
+                                    dbColumnField = "link_kannada";
 
                                     //rename file by appending current timestamp
                                     String newFileName = fi.getName().substring(0, fileName.lastIndexOf("."));
                                     newFileName += String.valueOf(System.currentTimeMillis()) + fileExtension;
                                     FileUtils.moveFile(FileUtils.getFile(uploadedKanndaFilePath), FileUtils.getFile(directory + newFileName));
                                     uploadedKanndaFilePath = newFileName;
+
+                                }
+
+                                if (db.success.intern() == "success") {
+                                    PreparedStatement preparedStatement = db.con.prepareStatement(selectFileStatement);
+                                    preparedStatement.setString(1, session.getAttribute("month").toString());
+                                    preparedStatement.setInt(2, Integer.parseInt(session.getAttribute("year").toString()));
+                                    preparedStatement.setString(3, session.getAttribute("area").toString());
+                                    preparedStatement.setInt(4, miscellaneousNumber);
+
+                                    String path;
+                                    ResultSet row = db.select(preparedStatement);
+                                    while (row.next()) {
+                                        path = directory + row.getString(dbColumnField);
+                                        General fileMethod = new General();
+                                        fileMethod.deleteFile(path);
+                                    }
                                 }
 
                             }
@@ -207,7 +238,7 @@ public class Miscellaneous {
                         String fieldName = fi.getFieldName();
                         for (int j = 0; j < miscellaneousFields.length; j++) {
                             if (fieldName.equals("misc" + miscellaneousNumber + miscellaneousFields[j])) {
-                                miscellaneousValues[j] = fi.getString(); //getting the input by checking the name attribute
+                                miscellaneousValues[j] = StringEscapeUtils.unescapeJavaScript(fi.getString()); //getting the input by checking the name attribute
                             }
                         }
                     }
@@ -215,25 +246,53 @@ public class Miscellaneous {
 
 
                 //updating db
-                DatabaseManager db = new DatabaseManager();
                 if (db.success.intern() == "success") {
-                    String updateStatement = "UPDATE emagazine.public.miscellaneous" +
-                            " SET title = ?, title_kannada = ?, miscellaneous_content = ?, miscellaneous_content_kannada = ?, link = ?, link_kannada = ?" +
-                            " WHERE month = ? AND year = ? AND area = ? AND serial = ? AND status = 'editing'  ;";
-                    PreparedStatement preparedStatement = db.con.prepareStatement(updateStatement);
+                    String updateStatement;
+                    PreparedStatement preparedStatement;
+                    int counter = 5;
+                    if(!uploadedEnglishFilePath.equals("#") && !uploadedKanndaFilePath.equals("#")) {
+
+                        updateStatement = "UPDATEms emagazine.public.miscellaneous" +
+                                " SET title = ?, title_kannada = ?, miscellaneous_content = ?, miscellaneous_content_kannada = ?, link = ?, link_kannada = ?" +
+                                " WHERE month = lower(?) AND year = ? AND area = ? AND serial = ? AND status = 'editing';";
+                        preparedStatement = db.con.prepareStatement(updateStatement);
+                        preparedStatement.setString(counter++ , uploadedEnglishFilePath); //counter=5
+                        preparedStatement.setString(counter++ , uploadedKanndaFilePath); //counter=6
+
+                    }else if(!uploadedEnglishFilePath.equals("#") && uploadedKanndaFilePath.equals("#")){
+
+                        updateStatement = "UPDATE emagazine.public.miscellaneous" +
+                                " SET title = ?, title_kannada = ?, miscellaneous_content = ?, miscellaneous_content_kannada = ?, link = ?" +
+                                " WHERE month = lower(?) AND year = ? AND area = ? AND serial = ? AND status = 'editing';";
+                        preparedStatement = db.con.prepareStatement(updateStatement);
+                        preparedStatement.setString(counter++ , uploadedEnglishFilePath);
+
+                    }else if(uploadedEnglishFilePath.equals("#") && !uploadedKanndaFilePath.equals("#")){
+
+                        updateStatement = "UPDATE emagazine.public.miscellaneous" +
+                                " SET title = ?, title_kannada = ?, miscellaneous_content = ?, miscellaneous_content_kannada = ?, link_kannada = ?" +
+                                " WHERE month = lower(?) AND year = ? AND area = ? AND serial = ? AND status = 'editing';";
+                        preparedStatement = db.con.prepareStatement(updateStatement);
+                        preparedStatement.setString(counter++ , uploadedKanndaFilePath);
+
+                    }else{
+                        updateStatement = "UPDATE emagazine.public.miscellaneous" +
+                                " SET title = ?, title_kannada = ?, miscellaneous_content = ?, miscellaneous_content_kannada = ?" +
+                                " WHERE month = lower(?) AND year = ? AND area = ? AND serial = ? AND status = 'editing';";
+                        preparedStatement = db.con.prepareStatement(updateStatement);
+
+                    }
                     preparedStatement.setString(1, miscellaneousValues[0]);
                     preparedStatement.setString(2, miscellaneousValues[1]);
                     preparedStatement.setString(3, miscellaneousValues[2]);
                     preparedStatement.setString(4, miscellaneousValues[3]);
-                    preparedStatement.setString(5, uploadedEnglishFilePath);
-                    preparedStatement.setString(6, uploadedKanndaFilePath);
-                    preparedStatement.setString(7, session.getAttribute("month").toString());
-                    preparedStatement.setInt(8, Integer.parseInt(session.getAttribute("year").toString()));
-                    preparedStatement.setString(9, session.getAttribute("area").toString());
-                    preparedStatement.setInt(10, miscellaneousNumber);
 
+                    preparedStatement.setString(counter++ , session.getAttribute("month").toString());
+                    preparedStatement.setInt(counter++ , Integer.parseInt(session.getAttribute("year").toString()));
+                    preparedStatement.setString(counter++ , session.getAttribute("area").toString());
+                    preparedStatement.setInt(counter++ , miscellaneousNumber);
                     db.update(preparedStatement);
-
+System.out.println(preparedStatement);
                     db.close();
                 }
             } catch (Exception e) {
